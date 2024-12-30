@@ -5,76 +5,67 @@
         Chi tiết Bài viết
     </x-slot:title>
 
-    <div class="content-wrapper">
-        <!-- Header -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-4">
-                    <div class="col-sm-6">
-                        <h1 class="text-2xl font-bold">Chi tiết Bài viết</h1>
-                    </div>
-                   
-                </div>
+    <div class="p-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-6 flex justify-between items-center">
+                <h1 class="text-3xl font-bold">Chi tiết Bài viết</h1>
+                <a href="{{ route('post.index') }}"
+                    class="text-red-500 ml-auto border border-red-500 px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300">
+                    ← Về danh sách
+                </a>
             </div>
-        </section>
 
-        <!-- Nội dung chính -->
-        <section class="content">
-            <div class="card shadow-lg">
-                <div class="card-header flex justify-end space-x-2">
-                
-                    <a href="{{ route('post.index') }}" class="btn btn-sm bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
-                        <i class="fa fa-arrow-left"></i> Về danh sách
-                    </a>
-                </div>
-
-                <div class="card-body">
-                    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
-                        <thead>
-                            <tr class="text-left text-gray-700">
-                                <th class="px-6 py-3 border-b">Tên trường</th>
-                                <th class="px-6 py-3 border-b">Giá trị</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">ID Bài viết</td>
-                                <td class="px-6 py-3 border-b">{{ $post->id }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Tên Bài viết</td>
-                                <td class="px-6 py-3 border-b">{{ $post->title }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Slug</td>
-                                <td class="px-6 py-3 border-b">{{ $post->slug }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Mô tả</td>
-                                <td class="px-6 py-3 border-b">{{ $post->description }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Nội dung</td>
-                                <td class="px-6 py-3 border-b">{!! $post->content !!}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Hình thu nhỏ</td>
-                                <td class="px-6 py-3 border-b">
-                                    <img src="{{ asset('storage/images/' . $post->thumbnail) }}" alt="thumbnail" class="w-32 h-32 object-cover rounded">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Loại</td>
-                                <td class="px-6 py-3 border-b">{{ ucfirst($post->type) }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Chuyên mục</td>
-                                <td class="px-6 py-3 border-b">{{ $post->topic->name ?? 'Không có' }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="bg-white shadow-md rounded-md p-6">
+                <table class="min-w-full table-auto border border-gray-200 rounded-lg">
+                    <thead>
+                        <tr class="bg-red-200 text-left">
+                            <th class="px-6 py-3 font-medium text-gray-700 text-sm">Tên trường</th>
+                            <th class="px-6 py-3 font-medium text-gray-700 text-sm">Giá trị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">ID Bài viết</td>
+                            <td class="px-6 py-4 border-b text-sm">{{ $post->id }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Tên Bài viết</td>
+                            <td class="px-6 py-4 border-b text-sm">{{ $post->title }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Slug</td>
+                            <td class="px-6 py-4 border-b text-sm">{{ $post->slug }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Mô tả</td>
+                            <td class="px-6 py-4 border-b text-sm">{{ $post->description }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Nội dung</td>
+                            <td class="px-6 py-4 border-b text-sm">{!! $post->content !!}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Hình thu nhỏ</td>
+                            <td class="px-6 py-4 border-b text-sm">
+                                <img src="{{ asset('storage/images/post/' . $post->thumbnail) }}" alt="thumbnail"
+                                    class="max-w-xs h-auto rounded-lg">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Loại</td>
+                            <td class="px-6 py-4 border-b text-sm">{{ ucfirst($post->type) }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Chuyên mục</td>
+                            <td class="px-6 py-4 border-b text-sm">{{ $post->topic->name ?? 'Không có' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Trạng thái</td>
+                            <td class="px-6 py-4 border-b text-sm">{{ $post->status == 1 ? 'Hoạt động' : 'Không hoạt động' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </section>
+        </div>
     </div>
 </x-layout-admin>

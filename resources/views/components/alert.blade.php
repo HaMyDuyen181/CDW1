@@ -9,5 +9,4 @@
         toastr.error('{{ $value}}',"Báo lỗi")
         
     @endsession
-    //Tương tự các loại thông báo khác
 </script>

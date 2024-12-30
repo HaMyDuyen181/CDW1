@@ -5,21 +5,23 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use App\Models\User;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+
 class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-{
-    // Lấy danh sách các liên hệ có trạng thái là "hoạt động" (status = 1) và chưa bị xóa (deleted_at = null)
-    $contacts = Contact::where('status', 1)
-        ->orderBy('created_at', 'desc') // Sắp xếp theo ngày tạo giảm dần
-        ->select('id', 'user_id', 'name', 'email', 'phone', 'title', 'content', 'reply_id', 'status', 'created_at', 'updated_at')
-        ->paginate(10); // Phân trang 10 bản ghi mỗi trang
+    {
+        $contacts = Contact::select("id", "name", "email", "phone", "title", "status")
+            ->orderBy('created_at', 'DESC')
+            ->paginate(8);
 
-    return view('backend.contact.index', compact('contacts')); // Trả về view với dữ liệu contacts
-}
+        return view('backend.contact.index', compact('contacts'));
+    }
 
 
     /**
@@ -27,8 +29,12 @@ class ContactController extends Controller
      */
     public function trash()
     {
-        return view('backend.contact.trash');
+        $contacts = Contact::onlyTrashed()
+            ->orderBy('deleted_at', 'DESC')
+            ->paginate(10); // Phân trang
+        return view('backend.contact.trash', compact('contacts'));
     }
+
     public function create()
     {
         return view('backend.contact.create');
@@ -58,36 +64,82 @@ class ContactController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        return view('backend.contact.edit');
+        $users = User::all();
+        $contact = Contact::where('id', $id)->firstOrFail();
+        $contacts = Contact::select("id", "name", "status")
+            ->get();
+        return view('backend.contact.edit', compact('contact', 'contacts', 'users'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        return view('backend.contact.update');    
+        $contact = Contact::where('id', $id)->first();
+        $contact->user_id = $request->user_id;
+        $contact->name = $request->name;
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+        $contact->title = $request->title;
+        $contact->content = $request->content;
+        $contact->updated_by = Auth::id() ?? 1;
+        $contact->updated_at = date('Y-m-d H:i:s');
+        $contact->status = $request->status ?? 0;
+        $contact->save();
+        return redirect()->route('contact.index')->with('success', 'cap nhat thanh cong');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function delete(string $id)
     {
-        return view('backend.contact.delete');    
+        $contact = Contact::find($id);
+        if ($contact) {
+            $contact->delete();
+            return redirect()->route('contact.index')->with('success', 'Xóa contact thành công!');
+        }
+
+        return redirect()->route('contact.index')->with('error', 'Không tìm thấy contact!');
     }
+
     public function restore(string $id)
     {
-        return view('backend.contact.restore');    
+        $contact = Contact::withTrashed()->where('id', $id);
+        if ($contact->first() != null) {
+            $contact->restore();
+            return redirect()->route('contact.trash')->with('success', 'Xóa contact thành công!');
+        }
+
+        return redirect()->route('contact.trash')->with('error', 'Không tìm thấy contact!');
     }
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        return view('backend.contact.destroy');    
+        $contact = Contact::withTrashed()->where('id', $id)->first();
+        if ($contact != null) {
+            if ($contact->image && File::exists(public_path("images/contact/" . $contact->image))) {
+                File::delete(public_path("images/contact/" . $contact->image));
+            }
+            $contact->forceDelete();
+
+            return redirect()->route("contact.trash")
+                ->with('success', 'xoa thanh cong');
+        }
+        return redirect()->route('contact.trash')->with('error', 'mẫu tin không còn tồn tại');
     }
-    public function status(string $id)
+    public function status(Request $request, $id)
     {
-        return view('backend.contact.status');    
+        $contact = Contact::findOrFail($id);
+    
+        // Toggle trạng thái (nếu trạng thái là 1 thì chuyển thành 0, ngược lại)
+        $contact->status = !$contact->status; 
+        $contact->save();
+    
+        return redirect()->route('contact.index')->with('success', 'Cập nhật trạng thái thành công!');
     }
 }

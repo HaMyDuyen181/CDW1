@@ -6,36 +6,43 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Banner;
 use App\Http\Requests\StoreBannerRequest;
+use App\Http\Requests\UpdateBannerRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
 class BannerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-{
-    $banners = Banner::where('status', '=', 1)
-        ->orderBy('created_at', 'DESC')
-        ->select("id", "name", "link", "image", "position", "status")
-        ->paginate(8);
-        
-    return view('backend.banner.index', compact('banners'));
-}
+    {
+        $banners = Banner::select("id", "name", "link", "image", "position", "status")
+            ->orderBy('created_at', 'DESC')
+            ->paginate(8);
+        return view('backend.banner.index', compact('banners'));
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function trash()
     {
-        return view('backend.banner.trash');
+        $banners = Banner::onlyTrashed()
+            ->orderBy('deleted_at', 'DESC')
+            ->paginate(5);
+        return view('backend.banner.trash', compact('banners'));
     }
     public function create()
     {
         $banners = Banner::orderBy('sort_order', 'ASC')
             ->select("id", "name", "sort_order")
             ->get();
-        return view('backend.banner.create',compact('banners'));
+        return view('backend.banner.create', compact('banners'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -64,6 +71,7 @@ class BannerController extends Controller
             return back()->with('error', 'chua chon hinh');
         }
     }
+
     /**
      * Display the specified resource.
      */
@@ -79,62 +87,116 @@ class BannerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $banner=Banner::find($id);
-        // if($banner==null)
-        // {
-        //     // toastr()->error('Oops! Something went wrong!', 'Oops!');
-
-        // }
-        // $list= Banner::where('status','!=',0)->orderBy('created_at','desc')->get();
-        // $htmlsortorder="";
-        // foreach($list as $item)
-        // {
-        //     if($banner->sort_order - 1==$item->sort_order)
-        //     {
-        //         $htmlsortorder .="<option selected value='" . ($item->sort_order+1) . "'>Sau " . $item->name . "</option>";
-        //     }
-        //     else
-        //     {
-        //         $htmlsortorder .="<option value='" . ($item->sort_order+1) . "'>Sau " . $item->name . "</option>";
-        //     }
-        // }
-        return view("backend.banner.edit",compact("banner"));
+        $banner = Banner::where('id', $id)->firstOrFail();
+        $banners = Banner::orderBy('sort_order', 'ASC')
+            ->select("id", "name", "sort_order", "status")
+            ->get();
+        return view('backend.banner.edit', compact('banner', 'banners'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        return view('backend.banner.update');
-    }
+   
+     public function update(Request $request, $id)
+     {
+         // Lấy banner theo id
+         $banner = Banner::findOrFail($id);
+     
+         // Xác thực dữ liệu từ request
+         $validatedData = $request->validate([
+             'name' => 'required|string|max:1000',
+             'link' => 'nullable|string|max:1000',
+             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+             'position' => 'required|in:slideshow,asd', // Chỉ chấp nhận giá trị hợp lệ
+             'description' => 'required|string',
+             'sort_order' => 'required|integer|min:1',
+             'status' => 'required|boolean',
+         ]);
+     
+         // Cập nhật các thuộc tính
+         $banner->name = $validatedData['name'];
+         $banner->link = $validatedData['link'] ?? $banner->link;
+     
+         // Xử lý hình ảnh nếu có upload mới
+         if ($request->hasFile('image')) {
+             if ($banner->image && File::exists(public_path("storage/images/banner/" . $banner->image))) {
+                 File::delete(public_path("storage/images/banner/" . $banner->image));
+             }
+     
+             $file = $request->file('image');
+             $filename = date('YmdHis') . '.' . $file->extension();
+             $file->move(public_path('storage/images/banner'), $filename);
+             $banner->image = $filename;
+         }
+     
+         // Đảm bảo giá trị position không null
+         $banner->position = $validatedData['position'] ?? 'slideshow'; // Sử dụng giá trị mặc định nếu không cung cấp
+         $banner->description = $validatedData['description'];
+         $banner->sort_order = $validatedData['sort_order'];
+         $banner->status = $validatedData['status'];
+         $banner->updated_by = Auth::id() ?? 1;
+         $banner->updated_at = now();
+     
+         // Lưu thay đổi
+         $banner->save();
+     
+         return redirect()->route('banner.index')->with('success', 'Cập nhật thành công');
+     }
+     
+ 
 
     /**
      * Remove the specified resource from storage.
      */
     public function delete(string $id)
     {
-        return view('backend.banner.delete');
+        $banner = Banner::find($id);
+        if ($banner) {
+            $banner->delete();
+            return redirect()->route('banner.index')->with('success', 'Xóa banner thành công!');
+        }
+
+        return redirect()->route('banner.index')->with('error', 'Không tìm thấy banner!');
     }
+
     public function restore(string $id)
     {
-        return view('backend.banner.restore');
-    }
-    public function destroy(string $id)
-    {
-        return view('backend.banner.destroy');
-    }
-    public function status(string $id)
-    {
-        // $banner=Banner::find($id);
-        // if($banner==null)
-        // $banner->status=($banner->status==1)?2:1;
-        // $banner->updated_at=date('Y-m-d H:i:s');
-        // $banner->updated_by=Auth::id()??1;
-        // $banner->save();
+        $banner = Banner::withTrashed()->where('id', $id);
+        if ($banner->first() != null) {
+            $banner->restore();
+            return redirect()->route('banner.trash')->with('success', 'Xóa banner thành công!');
+        }
 
-        return redirect()->route('backend.banner.index');
+        return redirect()->route('banner.trash')->with('error', 'Không tìm thấy banner!');
     }
+    
+    public function destroy($id)
+    {
+        $banner = Banner::withTrashed()->where('id', $id)->first();
+        if ($banner != null) {
+            if ($banner->image && File::exists(public_path("images/banner/" . $banner->image))) {
+                File::delete(public_path("images/banner/" . $banner->image));
+            }
+            $banner->forceDelete();
+
+            return redirect()->route("banner.trash")
+                ->with('success', 'xoa thanh cong');
+        }
+        return redirect()->route('banner.trash')->with('error', 'mẫu tin không còn tồn tại');
+    }
+    public function status(Request $request, $id)
+    {
+        $banner = Banner::findOrFail($id);
+    
+        // Toggle trạng thái (nếu trạng thái là 1 thì chuyển thành 0, ngược lại)
+        $banner->status = !$banner->status; 
+        $banner->save();
+    
+        return redirect()->route('banner.index')->with('success', 'Cập nhật trạng thái thành công!');
+    }
+    
+
 }

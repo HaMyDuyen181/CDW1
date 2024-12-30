@@ -22,17 +22,18 @@ class StoreBrandRequest extends FormRequest
     public function rules(): array
     {
         return [
-           'name' => 'required',
-           'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp',
+            'name'=>'required',
+            'image'=>'required|image|mimes:jpeg,png,jpg,gif,webp',
         ];
-    }
 
-    public function messages(): array
+    }
+    public function messages():array
     {
         return [
-            'name.required'=>'Tên sản phẩm không được để trống!',
-            'name.min'=>'Tên sản phẩm ít nhất 4 ký tự'
-
+            'name.required'=>'Ten bat buoc nhap.',
+            'image.required'=>'Vui long chon 1 hinh anh.',
+            'image.image'=>'Tep tai len phai la mot hinh anh.',
+            'image.mimes'=>'Hinh anh phai thuoc cac dinh dang: jpeg,png,jpg,gid,webp.',
         ];
     }
 }

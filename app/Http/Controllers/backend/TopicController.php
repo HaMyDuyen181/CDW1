@@ -3,58 +3,91 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Topic;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
 class TopicController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        // Lấy danh sách các chủ đề, có thể lọc theo trạng thái
-        $query = Topic::query();
-
-        // Lọc theo trạng thái nếu có
-        if ($request->has('status')) {
-            $query->where('status', $request->status);
-        }
-
-        // Lọc theo từ khóa trong tên hoặc mô tả chủ đề
-        if ($request->has('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('description', 'like', '%' . $request->search . '%');
-        }
-
-        // Sắp xếp chủ đề theo thứ tự đã chỉ định
-        $topics = $query->orderBy('sort_order')->paginate(10); // Phân trang 10 chủ đề mỗi trang
-
-        // Trả về view với danh sách chủ đề
+        $topics = Topic::select("id", "name", "slug", "description", "status")
+            ->orderBy('created_at', 'DESC')->paginate(10);
         return view('backend.topic.index', compact('topics'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function trash()
     {
-        return view('backend.topic.trash');
+        $topics = Topic::onlyTrashed()->orderBy('deleted_at', 'DESC')->paginate(10);
+        return view('backend.topic.trash', compact('topics'));
     }
+
+    public function delete(string $id)
+    {
+        $topic = Topic::find($id);
+        if ($topic) {
+            $topic->delete();
+            return redirect()->route('topic.index')->with('success', 'Xóa topic thành công!');
+        }
+
+        return redirect()->route('topic.index')->with('error', 'Không tìm thấy topic!');
+    }
+
+    public function restore(string $id)
+    {
+        $topic = Topic::withTrashed()->where('id', $id);
+        if ($topic->first() != null) {
+            $topic->restore();
+            return redirect()->route('topic.trash')->with('success', 'Xóa topic thành công!');
+        }
+
+        return redirect()->route('topic.trash')->with('error', 'Không tìm thấy topic!');
+    }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-        return view('backend.topic.create');
+        $topics = Topic::orderBy('sort_order', 'ASC')
+            ->select("id", "name", "sort_order")
+            ->get();
+        return view('backend.topic.create', compact('topics'));
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        return view('backend.topic.store');
+        $topic = new Topic();
+        $topic->name = $request->name;
+        $topic->slug = $request->slug;
+        $topic->sort_order = $request->sort_order;
+        $topic->description = $request->description ?? ''; // Nếu không nhập description, gán giá trị rỗng
+        $topic->created_by =Auth::id() ?? 1;// Gán ID người tạo (nếu chưa login thì mặc định 1)
+        $topic->created_at = now();
+        $topic->status = $request->status;
+    
+        $topic->save();
+    
+        return redirect()->route('topic.index')->with('success', 'Thêm topic thành công!');
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -68,37 +101,68 @@ class TopicController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        return view('backend.topic.edit');
+        $topic = Topic::where('id', $id)->firstOrFail();
+        $topics = Topic::orderBy('sort_order', 'ASC')
+            ->select("id", "name", "sort_order", "status")
+            ->get();
+        return view('backend.topic.edit', compact('topic', 'topics'));
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        return view('backend.topic.update');    
+        $topic = Topic::where('id', $id)->first();
+        $topic->name = $request->name;
+        $topic->slug = $request->slug;
+        $topic->description = $request->description;
+        $topic->sort_order = $request->sort_order;
+        $topic->updated_by = Auth::id() ?? 1;
+        $topic->updated_at = date('Y-m-d H:i:s');
+        $topic->status = $request->status ?? 0;
+        $topic->save();
+        return redirect()->route('topic.index')->with('success', 'cap nhat thanh cong');
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function delete(string $id)
+    public function destroy($id)
     {
-        return view('backend.topic.delete');    
+        $topic = Topic::withTrashed()->where('id', $id)->first();
+        if ($topic != null) {
+            if ($topic->image && File::exists(public_path("images/topic/" . $topic->image))) {
+                File::delete(public_path("images/topic/" . $topic->image));
+            }
+            $topic->forceDelete();
+
+            return redirect()->route("topic.trash")
+                ->with('success', 'xoa thanh cong');
+        }
+        return redirect()->route('topic.trash')->with('error', 'mẫu tin không còn tồn tại');
     }
-    public function restore(string $id)
+    public function status(Request $request, $id)
     {
-        return view('backend.topic.restore');    
-    }
-    public function destroy(string $id)
-    {
-        return view('backend.topic.destroy');    
-    }
-    public function status(string $id)
-    {
-        return view('backend.topic.status');    
+        $topic = Topic::findOrFail($id);
+    
+        // Toggle trạng thái (nếu trạng thái là 1 thì chuyển thành 0, ngược lại)
+        $topic->status = !$topic->status; 
+        $topic->save();
+    
+        return redirect()->route('topic.index')->with('success', 'Cập nhật trạng thái thành công!');
     }
 }

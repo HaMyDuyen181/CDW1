@@ -10,8 +10,11 @@
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-4">
-                    <div class="col-sm-6">
-                        <h1 class="text-2xl font-bold">Chi tiết Danh mục</h1>
+                    <div class="mb-6 flex justify-between items-center">
+                        <h1 class="text-3xl font-bold">Chi tiết danh mục</h1>
+                        <a href="{{ route('category.index') }}" class="text-red-500 ml-auto border border-red-500 px-4 py-2 rounded-md hover:bg-red-500 hover:text-white">
+                            ← Về danh sách
+                        </a>
                     </div>
                 </div>
             </div>
@@ -19,53 +22,43 @@
 
         <!-- Nội dung chính -->
         <section class="content">
-            <div class="card shadow-lg">
-                <div class="card-header flex justify-end space-x-2">
-                
-                    <a href="{{ route('category.index') }}" class="btn btn-sm bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
-                        <i class="fa fa-arrow-left"></i> Về danh sách
-                    </a>
-                </div>
-
-
-                <div class="card-body">
-                    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
-                        <thead>
-                            <tr class="text-left text-gray-700">
-                                <th class="px-6 py-3 border-b">Tên trường</th>
-                                <th class="px-6 py-3 border-b">Giá trị</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Tên Danh mục</td>
-                                <td class="px-6 py-3 border-b">{{ $category->name }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Slug</td>
-                                <td class="px-6 py-3 border-b">{{ $category->slug }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Mô tả</td>
-                                <td class="px-6 py-3 border-b">{{ $category->description }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">ID Cha</td>
-                                <td class="px-6 py-3 border-b">{{ $category->parent_id == 0 ? 'Không có' : 'Danh mục cha' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Thứ tự sắp xếp</td>
-                                <td class="px-6 py-3 border-b">{{ $category->sort_order }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Ảnh danh mục</td>
-                                <td class="px-6 py-3 border-b">
-                                    <img src="{{ asset('images/categories/' . $category->image) }}" alt="Category Image" class="w-32 h-32 object-cover">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="card-body">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                    <thead>
+                        <tr class="text-left text-black bg-red-200">
+                            <th class="px-6 py-3 border-b font-medium">Tên trường</th>
+                            <th class="px-6 py-3 border-b font-medium">Giá trị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-6 py-3 border-b font-semibold">Tên Danh mục</td>
+                            <td class="px-6 py-3 border-b">{{ $category->name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-3 border-b font-semibold">Slug</td>
+                            <td class="px-6 py-3 border-b">{{ $category->slug }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-3 border-b font-semibold">Mô tả</td>
+                            <td class="px-6 py-3 border-b">{{ $category->description }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-3 border-b font-semibold">ID Cha</td>
+                            <td class="px-6 py-3 border-b">{{ $category->parent_id == 0 ? 'Không có' : 'Danh mục cha' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-3 border-b font-semibold">Thứ tự sắp xếp</td>
+                            <td class="px-6 py-3 border-b">{{ $category->sort_order }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-3 border-b font-semibold">Ảnh danh mục</td>
+                            <td class="px-6 py-3 border-b">
+                                <img src="{{ asset('images/categories/' . $category->image) }}" alt="Category Image" class="w-32 h-32 object-cover">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
     </div>

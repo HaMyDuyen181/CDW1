@@ -5,69 +5,64 @@
         Chi tiết Chủ đề
     </x-slot:title>
 
-    <div class="content-wrapper">
-        <!-- Header -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-4">
-                    <div class="col-sm-6">
-                        <h1 class="text-2xl font-bold">Chi tiết Chủ đề</h1>
-                    </div>
-                   
-                </div>
+    <div class="p-6">
+        <div class="max-w-3xl mx-auto"> 
+            <div class="mb-6 flex justify-between items-center">
+                <h1 class="text-3xl font-bold">Chi tiết chủ đề</h1>
+                <a href="{{ route('topic.index') }}"
+                    class="text-red-500 ml-auto border border-red-500 px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300">
+                    ← Về danh sách
+                </a>
             </div>
-        </section>
 
-        <!-- Nội dung chính -->
-        <section class="content">
-            <div class="card shadow-lg">
-                <div class="card-header flex justify-end space-x-2">
-                
-                    <a href="{{ route('topic.index') }}" class="btn btn-sm bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
-                        <i class="fa fa-arrow-left"></i> Về danh sách
-                    </a>
-                </div>
-                <div class="card-body">
-                    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
-                        <thead>
-                            <tr class="text-left text-gray-700">
-                                <th class="px-6 py-3 border-b">Tên trường</th>
-                                <th class="px-6 py-3 border-b">Giá trị</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">ID Chủ đề</td>
-                                <td class="px-6 py-3 border-b">{{ $topic->id }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Tên chủ đề</td>
-                                <td class="px-6 py-3 border-b">{{ $topic->name }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Slug</td>
-                                <td class="px-6 py-3 border-b">{{ $topic->slug }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Thứ tự sắp xếp</td>
-                                <td class="px-6 py-3 border-b">{{ $topic->sort_order }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Mô tả</td>
-                                <td class="px-6 py-3 border-b">{{ $topic->description }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Ngày tạo</td>
-                                <td class="px-6 py-3 border-b">{{ $topic->created_at }}</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 border-b font-semibold">Ngày cập nhật</td>
-                                <td class="px-6 py-3 border-b">{{ $topic->updated_at }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="bg-white shadow-md rounded-md p-6">
+                <table class="min-w-full table-auto border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-red-200 text-left">
+                            <th class="px-6 py-3 font-medium text-black text-sm border border-gray-300">Tên trường
+                            </th>
+                            <th class="px-6 py-3 font-medium text-black text-sm border border-gray-300">Giá trị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-6 py-4 border border-gray-300 font-medium text-black text-sm">ID Chủ đề</td>
+                            <td class="px-6 py-4 border border-gray-300 text-sm">{{ $topic->id }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border border-gray-300 font-medium text-black text-sm">Tên chủ đề
+                            </td>
+                            <td class="px-6 py-4 border border-gray-300 text-sm">{{ $topic->name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border border-gray-300 font-medium text-black text-sm">Slug</td>
+                            <td class="px-6 py-4 border border-gray-300 text-sm">{{ $topic->slug }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border border-gray-300 font-medium text-black text-sm">Thứ tự sắp
+                                xếp</td>
+                            <td class="px-6 py-4 border border-gray-300 text-sm">{{ $topic->sort_order }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border border-gray-300 font-medium text-black text-sm">Mô tả</td>
+                            <td class="px-6 py-4 border border-gray-300 text-sm">{{ $topic->description }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border border-gray-300 font-medium text-black text-sm">Ngày tạo</td>
+                            <td class="px-6 py-4 border border-gray-300 text-sm">{{ $topic->created_at }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border border-gray-300 font-medium text-black text-sm">Ngày cập
+                                nhật</td>
+                            <td class="px-6 py-4 border border-gray-300 text-sm">{{ $topic->updated_at }}</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 border border-gray-300 font-medium text-black text-sm">Trạng thái</td>
+                            <td class="px-6 py-4 border border-gray-300 text-sm">{{ $topic->status == 1 ? 'Hoạt động' : 'Không hoạt động' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </section>
+        </div>
     </div>
 </x-layout-admin>

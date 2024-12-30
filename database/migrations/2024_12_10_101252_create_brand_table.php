@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 return new class extends Migration
 {
@@ -15,12 +16,13 @@ return new class extends Migration
             $table->id();
             $table->string('name', 1000);
             $table->string('slug', 1000);
-            $table->string('image', 1000);
+            $table->string('image', 1000)->nullable();
             $table->text('description');
             $table->unsignedInteger('sort_order');
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('status');
+            $table->softDeletes(); // tự động tạo cột deleted_at
             $table->timestamps();
         });
     }

@@ -3,46 +3,90 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Menu;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
 class MenuController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        // Lấy danh sách các menu có trạng thái là "hoạt động" (status = 1) và phân trang
-        $menus = Menu::where('status', 1)
-            ->orderBy('sort_order', 'asc')
-            ->select('id', 'name', 'link', 'position', 'status', 'sort_order', 'created_at', 'updated_at')
-            ->paginate(10); // Sử dụng paginate thay vì get
-    
-        return view('backend.menu.index', compact('menus')); // Trả về view với dữ liệu menus
+        $menus = Menu::select("id", "name", "link", "position", "type", "status")
+            ->orderBy('created_at', 'DESC')->paginate(10);
+        return view('backend.menu.index', compact('menus'));
     }
-    
-    /**
-     * Show the form for creating a new resource.
-     */
     public function trash()
     {
-        return view('backend.menu.trash');
+        $menus = Menu::onlyTrashed()->orderBy('deleted_at', 'DESC')->paginate(10);
+        return view('backend.menu.trash', compact('menus'));
     }
+
+    public function delete(string $id)
+    {
+        $menu = Menu::find($id);
+        if ($menu) {
+            $menu->delete();
+            return redirect()->route('menu.index')->with('success', 'Xóa menu thành công!');
+        }
+
+        return redirect()->route('menu.index')->with('error', 'Không tìm thấy menu!');
+    }
+
+    public function restore(string $id)
+    {
+        $menu = Menu::withTrashed()->where('id', $id);
+        if ($menu->first() != null) {
+            $menu->restore();
+            return redirect()->route('menu.trash')->with('success', 'Xóa menu thành công!');
+        }
+
+        return redirect()->route('menu.trash')->with('error', 'Không tìm thấy menu!');
+    }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-        return view('backend.menu.create');
+        $menus = Menu::orderBy('sort_order', 'ASC')
+            ->select("id", "name", "sort_order")
+            ->get();
+        return view('backend.menu.create', compact('menus'));
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        return view('backend.menu.store');
+        $menu = new Menu();
+        $menu->name = $request->name;
+        $menu->link = $request->link;
+        $menu->position = $request->position;
+        $menu->type = $request->type;
+        $menu->sort_order = $request->sort_order;
+        $menu->created_by = Auth::id() ?? 1;
+        $menu->created_at = date('Y-m-d H:i:s');
+        $menu->status = $request->status ?? 0;
+        $menu->save();
+        return redirect()->route('menu.index')->with('success', 'them thanh cong');
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -56,37 +100,69 @@ class MenuController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        return view('backend.menu.edit');
+        $menu = Menu::where('id', $id)->firstOrFail();
+        $menus = Menu::orderBy('sort_order', 'ASC')
+            ->select("id", "name", "sort_order", "status")
+            ->get();
+        return view('backend.menu.edit', compact('menu', 'menus'));
     }
-
     /**
      * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        return view('backend.menu.update');    
+        $menu = Menu::where('id', $id)->first();
+        $menu->name = $request->name;
+        $menu->link = $request->link;
+        $menu->position = $request->position;
+        $menu->type = $request->type;
+        $menu->sort_order = $request->sort_order;
+        $menu->updated_by = Auth::id() ?? 1;
+        $menu->updated_at = date('Y-m-d H:i:s');
+        $menu->status = $request->status ?? 0;
+        $menu->save();
+        return redirect()->route('menu.index')->with('success', 'cap nhat thanh cong');
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function delete(string $id)
+    public function destroy($id)
     {
-        return view('backend.menu.delete');    
+        $menu = Menu::withTrashed()->where('id', $id)->first();
+        if ($menu != null) {
+            if ($menu->image && File::exists(public_path("images/menu/" . $menu->image))) {
+                File::delete(public_path("images/menu/" . $menu->image));
+            }
+            $menu->forceDelete();
+
+            return redirect()->route("menu.trash")
+                ->with('success', 'xoa thanh cong');
+        }
+        return redirect()->route('menu.trash')->with('error', 'mẫu tin không còn tồn tại');
     }
-    public function restore(string $id)
+    public function status(Request $request, $id)
     {
-        return view('backend.menu.restore');    
-    }
-    public function destroy(string $id)
-    {
-        return view('backend.menu.destroy');    
-    }
-    public function status(string $id)
-    {
-        return view('backend.menu.status');    
+        $menu = Menu::findOrFail($id);
+    
+        // Toggle trạng thái (nếu trạng thái là 1 thì chuyển thành 0, ngược lại)
+        $menu->status = !$menu->status; 
+        $menu->save();
+    
+        return redirect()->route('menu.index')->with('success', 'Cập nhật trạng thái thành công!');
     }
 }
+

@@ -6,8 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use App\Http\Requests\StoreBrandRequest;
+use App\Http\Requests\UpdateBrandRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\File;
 class BrandController extends Controller
 {
     /**
@@ -15,8 +19,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::where('status', '=', 1)
-            ->orderBy('sort_order', 'ASC') // Sắp xếp theo sort_order (có thể thay đổi nếu cần)
+        $brands = Brand::orderBy('id', 'DESC') // Sắp xếp theo sort_order (có thể thay đổi nếu cần)
             ->select('id', 'name', 'slug', 'image', 'description', 'sort_order', 'status')
             ->paginate(8); // Phân trang 8 mục mỗi trang
             
@@ -29,7 +32,10 @@ class BrandController extends Controller
      */
     public function trash()
     {
-        return view('backend.brand.trash');
+        $brands = Brand::onlyTrashed()
+            ->orderBy('deleted_at', 'DESC')
+            ->paginate(10); // Phân trang
+        return view('backend.brand.trash', compact('brands'));
     }
     public function create()
 {
@@ -43,30 +49,30 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBrandRequest $request)
+    
+    public function store(Request $request)
     {
         $brand = new Brand();
-        $brand->name = $request->name;
-        $brand->slug = Str::of($request->name)->slug('-');
-        $brand->sort_order = $request->sort_order;
-        $brand->description = $request->description;
-        $brand->created_at = date('Y-m-d H:i:s');
-        $brand->created_by = Auth::id() ?? 1;
-        $brand->status = $request->status;
-        if($request->image)
-        {
-            if(in_array($request->image->extension(),["jpg","png","jpeg","gif"]))
-            {
-            $fileName=$brand->slug . '.' . $request->image->extension();
-            $request->image->move(public_path("images/brands"),$fileName);
-            $brand->image=$fileName;   
-            }          
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->extension();
+            $filename = date('YmdHis') . "." . $extension;
+            $file->move(public_path('images/brand'), $filename);
+            $brand->image = $filename;
+
+            $brand->name = $request->name;
+            $brand->slug = $request->slug;
+            $brand->description = $request->description;
+            $brand->sort_order = $request->sort_order;
+            $brand->created_by = Auth::id() ?? 1;
+            $brand->created_at = date('Y-m-d H:i:s');
+            $brand->status = $request->status ?? 0;
+            $brand->save();
+            return redirect()->route('brand.index')->with('success', 'them thanh cong');
+        } else {
+            return back()->with('error', 'chua chon hinh');
         }
-        $brand->save();
-
-        return redirect()->route('backend.brand.index');
     }
-
     /**
      * Display the specified resource.
      */
@@ -83,17 +89,38 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        return view('backend.brand.edit');
+        $brand = Brand::where('id', $id)->firstOrFail();
+        $brands = Brand::orderBy('sort_order', 'ASC')
+            ->select("id", "name", "sort_order", "status")
+            ->get();
+        return view('backend.brand.edit', compact('brand', 'brands'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        return view('backend.brand.update');
+        $brand = Brand::where('id', $id)->first();
+        $brand->name = $request->name;
+        $brand->slug = $request->slug;
+
+        if ($request->hasFile('image')) {
+            if ($brand->image && File::exists(public_path("storage/images/brand/" . $brand->image))) {
+                File::delete(public_path("storage/images/brand/" . $brand->image));
+            }
+            $file = $request->file('image');
+            $extension = $file->extension();
+            $filename = date('YmdHis') . "." . $extension;
+            $file->move(public_path('storage/images/brand'), $filename);
+            $brand->image = $filename;
+        }
+        $brand->description = $request->description;
+        $brand->sort_order = $request->sort_order;
+        $brand->updated_by = Auth::id() ?? 1;
+        $brand->updated_at = date('Y-m-d H:i:s');
+        $brand->status = $request->status ?? 0;
+        $brand->save();
+        return redirect()->route('brand.index')->with('success', 'cap nhat thanh cong');
     }
 
     /**
@@ -101,18 +128,46 @@ class BrandController extends Controller
      */
     public function delete(string $id)
     {
-        return view('backend.brand.delete');
+        $brand = Brand::find($id);
+        if ($brand) {
+            $brand->delete();
+            return redirect()->route('brand.index')->with('success', 'Xóa brand thành công!');
+        }
+
+        return redirect()->route('brand.index')->with('error', 'Không tìm thấy brand!');
     }
     public function restore(string $id)
     {
-        return view('backend.brand.restore');
+        $brand = Brand::withTrashed()->where('id', $id);
+        if ($brand->first() != null) {
+            $brand->restore();
+            return redirect()->route('brand.trash')->with('success', 'Xóa brand thành công!');
+        }
+
+        return redirect()->route('brand.trash')->with('error', 'Không tìm thấy brand!');
     }
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        return view('backend.brand.destroy');
+        $brand = Brand::withTrashed()->where('id', $id)->first();
+        if ($brand != null) {
+            if ($brand->image && File::exists(public_path("images/brand/" . $brand->image))) {
+                File::delete(public_path("images/brand/" . $brand->image));
+            }
+            $brand->forceDelete();
+
+            return redirect()->route("brand.trash")
+                ->with('success', 'xoa thanh cong');
+        }
+        return redirect()->route('brand.trash')->with('error', 'mẫu tin không còn tồn tại');
     }
-    public function status(string $id)
+    public function status(Request $request, $id)
     {
-        return view('backend.brand.status');
+        $brand = Brand::findOrFail($id);
+    
+        // Toggle trạng thái (nếu trạng thái là 1 thì chuyển thành 0, ngược lại)
+        $brand->status = !$brand->status; 
+        $brand->save();
+    
+        return redirect()->route('brand.index')->with('success', 'Cập nhật trạng thái thành công!');
     }
 }

@@ -11,7 +11,7 @@ class StoreTopicRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,18 @@ class StoreTopicRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'=>'required',
+            'image'=>'required|image|mimes:jpeg,png,jpg,gif,webp',
+        ];
+
+    }
+    public function messages():array
+    {
+        return [
+            'name.required'=>'Ten bat buoc nhap.',
+            'image.required'=>'Vui long chon 1 hinh anh.',
+            'image.image'=>'Tep tai len phai la mot hinh anh.',
+            'image.mimes'=>'Hinh anh phai thuoc cac dinh dang: jpeg,png,jpg,gid,webp.',
         ];
     }
 }

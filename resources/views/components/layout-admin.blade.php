@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite('resources/css/app.css')
     @include("components.alert")
+        <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script> <!-- Thêm jQuery -->
+        <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}" /> <!-- Thêm CSS của Toastr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css"
         integrity="sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>{{ $title ?? 'Admin' }}</title>
@@ -115,5 +117,6 @@
         <p>&copy; 2024 ĐƯỢC THỰC HIỆN BỞI HÀ MỸ DUYÊN.</p>
     </footer>
     {{ $footer ?? "" }}
+    <script src="{{ asset('js/toastr.min.js') }}"></script> 
 </body>
 </html>
