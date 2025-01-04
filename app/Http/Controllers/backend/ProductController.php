@@ -17,6 +17,36 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function getlistcategoryid($rowid)
+    {
+        $listcatid = [];
+        array_push($listcatid, $rowid);
+        $list1 = Category::where([['parent_id', '=', $rowid], ['status', '=', 1]])->select("id")->get();
+        if (count($list1) > 0) {
+            foreach ($list1 as $row1) {
+                array_push($listcatid, $row1->id);
+                $list2 = Category::where([['parent_id', '=', $row1->id], ['status', '=', 1]])->select("id")->get();
+                if (count($list2) > 0) {
+                    foreach ($list2 as $row2) {
+                        array_push($listcatid, $row2->id);
+                        // $list2 = Category::where([['parent_id','=',$row1->id],['status','=',1]])->select("id")->get();
+                    }
+                }
+            }
+        }
+        return $listcatid;
+    }
+    public function product_detail($slug)
+    {
+        $product = Product::where([['status', '=', 1], ['slug', '=', $slug]])->first();
+        $listcatid = $this->getlistcategoryid($product->category_id);
+        $list_product = Product::where([['status', '=', 1], ['id', '!=', $product->id]])
+            ->whereIn('category_id', $listcatid)
+            ->orderBy('created_at', 'desc')
+            ->limit(8)
+            ->get();
+        return view('frontend.product_detail', compact('product', 'list_product'));
+    }
     public function index()
     {
         $products = Product::select("id", "name", "category_id", "brand_id", "slug", "thumbnail", "status")

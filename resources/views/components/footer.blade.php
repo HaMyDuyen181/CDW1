@@ -1,115 +1,56 @@
-<footer class="bg-white text-gray-800 py-16 mt-12 shadow-lg">
-<div class="container mx-auto px-6 lg:px-24">
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 mb-8"
-    >
-      <!-- Logo Section -->
-      <div class="flex flex-col items-center text-center">
-        <a href="/"> 
-          <img
-            src="https://bizweb.dktcdn.net/100/518/478/themes/952683/assets/logo_footer.png?1731639110376"
-            alt="Logo"
-            class="w-45 mb-4"
-          />
-        </a>
-        <p class="text-lg font-light">
-          Chúng tôi cung cấp giải pháp tuyệt vời cho mọi nhu cầu của bạn.
-        </p>
+  <div class="container mx-auto">
+      <!-- Bố cục chính -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <!-- Cột 1: Giới thiệu -->
+          <div>
+              <h3 class="text-xl font-bold mb-4">Giới thiệu</h3>
+              <p class="text-gray-400 text-sm">
+                  Chúng tôi cung cấp các sản phẩm hữu cơ chất lượng cao, thân thiện với môi trường và đảm bảo sức khỏe người tiêu dùng.
+              </p>
+              <a href="/gioi-thieu" class="text-lime-500 text-sm hover:underline">Tìm hiểu thêm...</a>
+          </div>
+
+          <!-- Cột 2: Danh mục -->
+          <div>
+              <h3 class="text-xl font-bold mb-4">Danh mục sản phẩm</h3>
+              <ul class="text-gray-400 space-y-2 text-sm">
+                  <li><a href="/danh-muc/thuc-pham-chuc-nang" class="hover:text-lime-500">Thực phẩm chức năng</a></li>
+                  <li><a href="/danh-muc/cham-soc-ca-nhan" class="hover:text-lime-500">Chăm sóc cá nhân</a></li>
+                  <li><a href="/danh-muc/duoc-my-pham" class="hover:text-lime-500">Dược mỹ phẩm</a></li>
+                  <li><a href="/danh-muc/thuoc" class="hover:text-lime-500">Thuốc</a></li>
+              </ul>
+          </div>
+
+          <!-- Cột 3: Chính sách -->
+          <div>
+              <h3 class="text-xl font-bold mb-4">Chính sách</h3>
+              <ul class="text-gray-400 space-y-2 text-sm">
+                  <li><a href="/cac-chinh-sach/chinh-sach-bao-mat" class="hover:text-lime-500">Chính sách bảo mật</a></li>
+                  <li><a href="/cac-chinh-sach/chinh-sach-doi-tra" class="hover:text-lime-500">Chính sách đổi trả</a></li>
+                  <li><a href="/cac-chinh-sach/chinh-sach-van-chuyen" class="hover:text-lime-500">Chính sách vận chuyển</a></li>
+                  <li><a href="/cac-chinh-sach/chinh-sach-thanh-toan" class="hover:text-lime-500">Chính sách thanh toán</a></li>
+              </ul>
+          </div>
+
+          <!-- Cột 4: Liên hệ -->
+          <div>
+              <h3 class="text-xl font-bold mb-4">Liên hệ</h3>
+              <ul class="text-gray-400 text-sm space-y-2">
+                  <li>Email: <a href="mailto:info@example.com" class="hover:text-lime-500">hamyduyen@gmail.com</a></li>
+                  <li>Phone: <a href="tel:+123456789" class="hover:text-lime-500">+123 456 789</a></li>
+                  <li>Địa chỉ: Trương Văn Thành, Phường Hiệp Phú, Quận 9</li>
+              </ul>
+              <div class="mt-4 flex space-x-4">
+                  <a href="#" class="text-gray-400 hover:text-lime-500"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#" class="text-gray-400 hover:text-lime-500"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="text-gray-400 hover:text-lime-500"><i class="fab fa-instagram"></i></a>
+                  <a href="#" class="text-gray-400 hover:text-lime-500"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+          </div>
       </div>
 
-      <!-- About Us Section -->
-      <div class="flex flex-col text-center sm:text-left">
-        <h3 class="text-2xl font-bold mb-3 text-black">Về Chúng Tôi</h3>
-        <p class="text-lg mb-4">
-          Chúng tôi cam kết cung cấp các sản phẩm và dịch vụ chất lượng cao
-          đáp ứng nhu cầu và vượt qua mong đợi của bạn.
-        </p>
-        <a
-          href="/gioi-thieu"
-          class="text-blue-400 hover:text-blue-500 font-medium"
-          >Tìm hiểu thêm &rarr;</a
-        >
+      <!-- Dòng bản quyền -->
+      <div class="border-t border-gray-700 pt-4 text-center text-sm text-gray-500">
+          © 2024 Công ty của Duyên. Bảo lưu mọi quyền. 
       </div>
-
-      <!-- Policies Section -->
-      <div class="flex flex-col text-center sm:text-left">
-        <h3 class="text-2xl font-bold mb-3 text-black">Chính Sách</h3>
-        <ul class="space-y-2">
-          <li>
-            <a
-              href="/chinh-sach-bao-mat"
-              class="text-black hover:text-blue-500 transition-colors"
-            >
-              Chính sách bảo mật
-            </a>
-          </li>
-          <li>
-            <a
-              href="/chinh-sach-giao-hang"
-              class="text-black hover:text-blue-500 transition-colors"
-            >
-              Chính sách giao hàng
-            </a>
-          </li>
-          <li>
-            <a
-              href="/chinh-sach-doi-tra"
-              class="text-black hover:text-blue-500 transition-colors"
-            >
-              Chính sách đổi trả
-            </a>
-          </li>
-          <li>
-            <a
-              href="/chinh-sach-thanh-toan"
-              class="text-black hover:text-blue-500 transition-colors"
-            >
-              Chính sách thanh toán
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Social Media Section -->
-      <div class="flex flex-col text-center sm:text-left">
-        <h3 class="text-2xl font-bold mb-3 text-black">
-          Theo Dõi Chúng Tôi
-        </h3>
-        <p class="text-lg mb-4">
-          Kết nối với chúng tôi qua các kênh mạng xã hội:
-        </p>
-        <div class="flex justify-center sm:justify-start space-x-6">
-          <a
-            href="https://www.facebook.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-700 hover:text-blue-500 transition duration-300 transform hover:scale-110"
-          >
-            <i class="fab fa-facebook-f text-3xl"></i>
-          </a>
-          <a
-            href="https://www.twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-gray-500 hover:text-blue-400 transition duration-300 transform hover:scale-110"
-          >
-            <i class="fab fa-twitter text-3xl"></i>
-          </a>
-          <a
-            href="https://www.instagram.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-pink-700 hover:text-pink-500 transition duration-300 transform hover:scale-110"
-          >
-            <i class="fab fa-instagram text-3xl"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer Bottom Text -->
-    <div class="text-center text-black mt-12 bg-blue-600 py-2">
-      <p className="text-sm">&copy; Copyright By Hà Mỹ Duyên.</p>
-    </div>
   </div>
-</footer>

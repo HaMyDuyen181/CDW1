@@ -10,14 +10,14 @@
   </x-slot:footer>
   <div>
  <!-- Slider -->
- <x-slide/>
+ <x-slider/>
  <!-- San pham theo danh muc -->
- <x-productcategory/>
+ <x-home-list-category/>
  <!-- San pham moi -->
- <x-product-store/>
+ <x-product-new/>
  <!-- San pham khuyen mai -->
- <x-product-sale/>
+ <x-product-sale />
  <!-- Bai viet moi nhat -->
- <x-post/>
+ <x-post-new/>
 </div>
 </x-layout-site>

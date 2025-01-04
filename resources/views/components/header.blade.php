@@ -1,3 +1,8 @@
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  rel="stylesheet"
+/>
+  
 <header class="bg-white shadow-lg sticky top-0 z-50">
       <div
         class="container mx-auto flex justify-between items-center px-6 py-4"

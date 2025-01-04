@@ -36,7 +36,14 @@ Route::get('/bai-viet/{slug}', [PostController:: class, 'detail'])->name('site.p
 Route::get('/danh-muc/{slug}', [SanphamController::class, 'showCategory'])->name('site.product.category');
 Route::get('/lien-he', [LienheController::class, 'index'])->name('site.contact');
 Route::get('/gioi-thieu', [GioithieuController::class, 'index'])->name('frontend.about_us');
-Route::get('/gio-hang', [GiohangController::class, 'index'])->name('frontend.cart');
+Route::get('/chi-tiet-san-pham/{slug}', [ProductController::class, 'product_detail'])->name('site.product.detail');
+//cart
+Route::get('cart', [GiohangController::class, 'view'])->name('cart.view');
+Route::get('cart/add', [GiohangController::class, 'add'])->name('cart.add');
+Route::post('cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::get('cart/delete/{id}', [CartController::class, 'delete'])->name('cart.delete');
+Route::get('thanh-toan', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::get('checkout/{product_id}', [CheckoutController::class, 'index'])->name('site.checkout');
 
 //Route trang quản trị
 
