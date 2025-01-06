@@ -24,17 +24,13 @@
           <x-search/>
 
 
-         <!-- Cart Icon -->
-<a
-href="/gio-hang"
-class="relative text-gray-700 hover:text-blue-500 transition duration-300"
->
-<i class="fas fa-shopping-cart text-xl"></i>
-<span
-  class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2"
->
-  2
-</span>
+        <!-- Cart Icon -->
+<a href="/gio-hang"
+class="relative text-gray-700 hover:text-blue-500 transition duration-300">
+ <i class="fas fa-shopping-cart text-xl"></i>
+ <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2">
+     {{ session('cart_count', 0) }} <!-- Số lượng giỏ hàng lấy từ session -->
+ </span>
 </a>
 
 
@@ -44,13 +40,14 @@ class="relative text-gray-700 hover:text-blue-500 transition duration-300"
     <i class="fas fa-user text-xl"></i>
   </button>
   <!-- Dropdown Menu -->
-  <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden group-hover:block">
+  <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none opacity-0 visibility-hidden transition-all duration-300 group-hover:opacity-100 group-hover:visibility-visible">
     <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Hồ sơ</a>
+      <a href="/thong-tin" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Hồ sơ</a>
       <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Đăng xuất</a>
     </div>
   </div>
 </div>
+
 
         </div>
       </div>

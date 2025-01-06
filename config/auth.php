@@ -36,11 +36,23 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
     ],
+
+    'api' => [
+        'driver' => 'token',
+        'provider' => 'users',
+    ],
+
+    // Thêm guard cho admin
+    'admin' => [
+        'driver' => 'session',
+        'provider' => 'admins',
+    ],
+],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -64,6 +76,11 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
+          // Thêm provider cho admin
+    'admins' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Admin::class, // Thay đổi model nếu bạn có model Admin riêng
+    ],  
 
         // 'users' => [
         //     'driver' => 'database',

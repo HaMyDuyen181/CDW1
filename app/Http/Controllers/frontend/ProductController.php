@@ -5,6 +5,8 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
+
 class ProductController extends Controller
 {
     public function index()
@@ -34,7 +36,7 @@ class ProductController extends Controller
         }
 
         // Trả về view với danh sách sản phẩm
-        return view('site.products.category', compact('products', 'slug'));
+        return view('product.category', compact('products', 'slug'));
     }
     public function product_detail($slug)
     {
@@ -65,4 +67,6 @@ class ProductController extends Controller
             }
         }
         return $listcatid;
-    }}
+    }
+   
+}

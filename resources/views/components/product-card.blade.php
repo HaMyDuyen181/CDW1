@@ -11,8 +11,9 @@
         <h2 class="text-purple-600 text-lg font-semibold text-center truncate">{{ $product->name }}</h2>
         <div class="flex justify-between items-center mt-3">
             <span class="text-purple-500 font-bold">
-                Giá: {{ number_format($product->price_buy, 0, ',', '.') }} ₫
+                Giá: {{ number_format($product->price_buy * 1000, 0, '.', '.') }}đ
             </span>
+            
             <a 
                 href="{{ route('site.product.detail', ['slug' => $product->slug]) }}"
                 class="text-blue-500 hover:text-blue-700 transition duration-300">
@@ -21,15 +22,16 @@
         </div>
         <div class="mt-4 flex justify-between">
             <!-- Nút Thêm vào Giỏ hàng -->
-            <a href="{{ route('cart.add', ['product_id' => $product->id]) }}"
+            <a href="{{ route('site.addcart', ['id' => $product->id]) }}"
                 class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-200">
                 Thêm vào giỏ hàng
             </a>
             <!-- Nút Mua ngay -->
-            <a href="{{ route('site.checkout', ['product_id' => $product->id]) }}"
+            <a href="{{ route('site.checkout') }}"
                 class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200">
                 Mua ngay
             </a>
         </div>
+        
     </div>
 </div>

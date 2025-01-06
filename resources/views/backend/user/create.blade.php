@@ -14,7 +14,7 @@
             </div>
 
             <div class="bg-white shadow-md rounded-md p-6">
-                <form action="{{ route('user.store') }}" method="POST">
+                <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data"> <!-- Thêm enctype để hỗ trợ upload file -->
                     @csrf
 
                     <div class="space-y-4"> {{-- Khoảng cách giữa các phần tử form --}}
@@ -74,6 +74,15 @@
                                 </select>
                                 @if ($errors->has('role'))
                                     <div class="text-red-500 text-sm">{{ $errors->first('role') }}</div>
+                                @endif
+                            </div>
+
+                            <div>
+                                <label for="image" class="block text-sm font-medium text-black">Hình ảnh</label>
+                                <input type="file" name="image" id="image"
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                @if ($errors->has('image'))
+                                    <div class="text-red-500 text-sm">{{ $errors->first('image') }}</div>
                                 @endif
                             </div>
                         </div>

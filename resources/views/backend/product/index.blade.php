@@ -34,8 +34,11 @@
                             <input type="checkbox" name="selected[]" value="{{ $item->id }}">
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900">
-                            <img src="{{ asset('storage/images/product/' . $item->thumbnail) }}" alt="{{ $item->name }}" class="rounded-md" width="50">
-                        </td>
+                            <img src="{{ asset('/images/product/' . $item->thumbnail) }}" 
+                                 alt="{{ $item->name }}" 
+                                 class="rounded-md" 
+                                 width="150" height="150">
+                        </td>                        
                         <td class="px-6 py-4 text-sm text-gray-900">{{ $item->name }}</td>
                         <td class="px-6 py-4 text-sm text-gray-900">{{ $item->category->name ?? 'Không có danh mục' }}</td>
                         <td class="px-6 py-4 text-sm text-gray-900">{{ $item->brand->name ?? 'Không có thương hiệu' }}</td>

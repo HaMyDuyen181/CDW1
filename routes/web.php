@@ -6,8 +6,8 @@ use App\Http\Controllers\frontend\HomeController as TrangchuController;
 use App\Http\Controllers\frontend\ProductController as SanphamController;
 use App\Http\Controllers\frontend\ContactController as LienheController;
 use App\Http\Controllers\frontend\AboutusController as GioithieuController;
-use App\Http\Controllers\frontend\CartController as GiohangController;
-
+use App\Http\Controllers\frontend\CartController;
+use App\Http\Controllers\frontend\PostController as BaivietController;
 //Controller trang quản trị
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\BannerController;
@@ -28,6 +28,8 @@ use App\Http\Controllers\backend\OrderdetailController;
 
 //Route trang người dùng
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ThanhVienController;
 
 Route::get('/', [TrangchuController::class, 'index'])->name('site.home');
 Route::get('/san-pham', [SanphamController::class, 'index'])->name('site.product');
@@ -36,20 +38,35 @@ Route::get('/bai-viet/{slug}', [PostController:: class, 'detail'])->name('site.p
 Route::get('/danh-muc/{slug}', [SanphamController::class, 'showCategory'])->name('site.product.category');
 Route::get('/lien-he', [LienheController::class, 'index'])->name('site.contact');
 Route::get('/gioi-thieu', [GioithieuController::class, 'index'])->name('frontend.about_us');
-Route::get('/chi-tiet-san-pham/{slug}', [ProductController::class, 'product_detail'])->name('site.product.detail');
-//cart
-Route::get('cart', [GiohangController::class, 'view'])->name('cart.view');
-Route::get('cart/add', [GiohangController::class, 'add'])->name('cart.add');
-Route::post('cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::get('cart/delete/{id}', [CartController::class, 'delete'])->name('cart.delete');
-Route::get('thanh-toan', [CartController::class, 'checkout'])->name('cart.checkout');
-Route::get('checkout/{product_id}', [CheckoutController::class, 'index'])->name('site.checkout');
+Route::get('/chi-tiet-san-pham/{slug}', [SanphamController::class, 'product_detail'])->name('site.product.detail');
+Route::get("chi-tiet-bai-viet/{slug}", [BaivietController::class, "post_detail"])->name('site.post.detail');
 
-//Route trang quản trị
+//cart
+Route::get('/addcart/{id}', [CartController::class, 'addcart'])->name('site.addcart');
+Route::post('/updatecart', [CartController::class, 'updatecart'])->name('site.updatecart');
+Route::get('/delcart/{id?}', [CartController::class, 'delcart'])->name('site.delcart');
+Route::get('/gio-hang', [CartController::class, 'index'])->name('site.cart');
+Route::post('/thanh-toan', [CartController::class, 'checkout'])->name('site.checkout');
+Route::get('/cam-on', [CartController::class, 'thanks'])->name('site.thanks');
+//
+Route::get('/dang-nhap', [ThanhVienController::class, 'login'])->name('site.login');
+Route::post('/dang-nhap', [ThanhVienController::class, 'dologin'])->name('site.dologin');
+Route::get('/dang-ky', [ThanhVienController::class, 'register'])->name('site.register');
+Route::post('/dang-ky', [ThanhVienController::class, 'doregister'])->name('site.doregister');
+Route::get('/dang-xuat', [ThanhVienController::class, 'logout'])->name('site.logout');
+Route::get('/thong-tin', [ThanhVienController::class, 'profile'])->name('site.profile');
+//đăng nhập trang quan trị
+Route::get('admin/login', [AuthController::class, 'login'])->name('admin.login');
+Route::post('admin/login', [AuthController::class, 'dologin'])->name('admin.doLogin');
+Route::get('admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+//route admin -- Kiểm tra đăng nhập bằng middleware
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get("/", [DashboardController::class, 'index'])->name('admin.dashboard');
+});
 
 Route::prefix('admin')->group(function () {
     Route::get("/", [DashboardController::class, "index"])->name("dashboard");
-    //Product
     Route::prefix('product')->group(function () {
         Route::get('trash', [ProductController::class, 'trash'])->name('product.trash');
         Route::delete('{product}/delete', [ProductController::class, 'delete'])->name('product.delete'); //xoa vao thung rac

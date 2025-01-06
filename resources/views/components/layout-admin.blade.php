@@ -81,23 +81,26 @@
                             <span class="text-lg font-medium">Chủ đề bài viết</span>
                         </a>
                     </li>
-                      {{-- <li>
-                        <a class="flex items-center p-3 hover:bg-indigo-800 rounded-lg transition-all duration-300" to="/admin/productstore">
-                          <i class="mr-4 fas fa-store text-xl"></i>
-                          <span class="text-lg font-medium">Nhập hàng</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a class="flex items-center p-3 hover:bg-indigo-800 rounded-lg transition-all duration-300" to="/admin/productsale">
-                          <i class="mr-4 fas fa-percent text-xl"></i>
-                          <span class="text-lg font-medium">Khuyến mãi</span>
-                        </a>
-                      </li> --}}
                     <li>
                         <a class="flex items-center p-3 hover:bg-indigo-800 rounded-lg transition-all duration-300" href="/admin/user">
                             <i class="mr-4 fas fa-user-friends text-xl"></i>
                             <span class="text-lg font-medium">Thành viên</span>
                         </a>
+                    </li>
+                    <li>
+                        @if(Auth::guard('admin')->check())
+                            <!-- Nếu đã đăng nhập, hiển thị nút đăng xuất -->
+                            <a class="flex items-center p-3 hover:bg-indigo-800 rounded-lg transition-all duration-300" href="{{ route('admin.logout') }}">
+                                <i class="mr-4 fas fa-sign-out-alt text-xl"></i>
+                                <span class="text-lg font-medium">Đăng xuất</span>
+                            </a>
+                        @else
+                            <!-- Nếu chưa đăng nhập, hiển thị nút đăng nhập -->
+                            <a class="flex items-center p-3 hover:bg-indigo-800 rounded-lg transition-all duration-300" href="{{ route('admin.login') }}">
+                                <i class="mr-4 fas fa-sign-in-alt text-xl"></i>
+                                <span class="text-lg font-medium">Đăng nhập</span>
+                            </a>
+                        @endif
                     </li>
                 </ul>
             </nav>

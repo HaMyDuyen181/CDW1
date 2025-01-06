@@ -22,7 +22,7 @@
                             <th class="px-6 py-4 text-left text-sm font-medium text-gray-900">#</th>
                             <th class="px-6 py-4 text-left text-sm font-medium text-gray-900">Hình ảnh</th>
                             <th class="px-6 py-4 text-left text-sm font-medium text-gray-900">Tiêu đề</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-gray-900">Mô tả</th>
+                            <th class="px-6 py-4 text-left text-sm font-medium text-gray-900">Slug</th>
                             <th class="px-6 py-4 text-left text-sm font-medium text-gray-900">Loại bài viết</th>
                             <th class="px-6 py-4 text-left text-sm font-medium text-gray-900">Trạng thái</th>
                             <th class="px-6 py-4 text-center text-sm font-medium text-gray-900">Chức năng</th>
@@ -33,14 +33,13 @@
                         <tr class="border-b">
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $item->id }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">
-                                @if ($item->thumbnail)
-                                    <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="Thumbnail" class="w-16 h-16 object-cover rounded">
-                                @else
-                                    N/A
-                                @endif
-                            </td>
+                                <img src="{{ asset('/images/posts/' . $item->thumbnail) }}" 
+                                     alt="{{ $item->name }}" 
+                                     class="rounded-md" 
+                                     width="150" height="150">
+                            </td>  
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $item->title }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $item->description }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $item->slug }}</td>
                           
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $item->type }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">
