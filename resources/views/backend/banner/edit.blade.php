@@ -43,7 +43,7 @@
                             <input type="file" name="image" id="image"
                                 class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             @if (isset($banner) && $banner->image)
-                                <img src="{{ asset('storage/images/banner/' . $banner->image) }}" alt="{{$banner->image}}"
+                                <img src="{{ asset('/images/banners/' . $banner->image) }}" alt="{{$banner->image}}"
                                     class="mt-2 max-w-xs">
                             @endif
                             @if ($errors->has('image'))

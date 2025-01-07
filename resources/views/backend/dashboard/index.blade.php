@@ -4,6 +4,19 @@
     </x-slot:title>
     
     <div class="relative">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8 p-6 bg-gray-100 rounded-xl shadow-md">
+            <div>
+                <h1 class="text-2xl font-semibold text-gray-800">Hello, Admin!</h1>
+                <p class="text-gray-600">Welcome back to your dashboard</p>
+            </div>
+            <a href="{{ route('admin.logout') }}" class="flex items-center text-red-500 hover:text-red-700 transition-colors font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h6a2 2 0 002-2v-1" />
+                </svg>
+                Đăng xuất
+            </a>
+                    </header>
         <!-- Content Area -->
         <div class="flex-2 p-6 ">
             <!-- Statistics Section -->

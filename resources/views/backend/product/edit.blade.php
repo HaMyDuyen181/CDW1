@@ -60,7 +60,7 @@
                             <input type="file" name="thumbnail" id="thumbnail" 
                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             @if ($product->thumbnail)
-                                <img src="{{ asset('storage/images/product/' . $product->thumbnail) }}" alt="{{ $product->name }}" class="mt-2" width="200">
+                                <img src="{{ asset('/images/product/' . $product->thumbnail) }}" alt="{{ $product->name }}" class="mt-2" width="200">
                             @endif
                         </div>
 

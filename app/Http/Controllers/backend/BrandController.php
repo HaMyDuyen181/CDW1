@@ -50,7 +50,7 @@ class BrandController extends Controller
      * Store a newly created resource in storage.
      */
     
-    public function store(Request $request)
+    public function store(StoreBrandRequest $request)
     {
         $brand = new Brand();
         if ($request->hasFile('image')) {
@@ -98,20 +98,20 @@ class BrandController extends Controller
         return view('backend.brand.edit', compact('brand', 'brands'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateBrandRequest $request, $id)
     {
         $brand = Brand::where('id', $id)->first();
         $brand->name = $request->name;
         $brand->slug = $request->slug;
 
         if ($request->hasFile('image')) {
-            if ($brand->image && File::exists(public_path("storage/images/brand/" . $brand->image))) {
-                File::delete(public_path("storage/images/brand/" . $brand->image));
+            if ($brand->image && File::exists(public_path("/images/brand/" . $brand->image))) {
+                File::delete(public_path("/images/brand/" . $brand->image));
             }
             $file = $request->file('image');
             $extension = $file->extension();
             $filename = date('YmdHis') . "." . $extension;
-            $file->move(public_path('storage/images/brand'), $filename);
+            $file->move(public_path('/images/brand'), $filename);
             $brand->image = $filename;
         }
         $brand->description = $request->description;

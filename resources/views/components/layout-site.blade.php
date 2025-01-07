@@ -1,24 +1,32 @@
 @vite('resources/css/app.css')
 {{ $header ?? '' }}
 </head>
-<body class="font-sans bg-gray-100">
-<!-- Header Section -->
-<header class="bg-white shadow">
-    <x-header />
-</header>
+<body>
+   
+    <header class="sticky top-0 z-50 bg-white lg-shadow">
+        <x-header/>
+    </header>
+  
 
-<!-- Main Content Section -->
-<main class="container mx-auto px-4 py-6">
-    {{ $slot }}
+    <main>
+        {{-- Hiển thị thông báo nếu có --}}
+        @if (session('warning'))
+        <div class="bg-yellow-100 text-yellow-700 p-4 mb-4 rounded">
+            {{ session('warning') }}
+        </div>
+        @elseif (session('error'))
+        <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">
+            {{ session('error') }}
+        </div>
+        @endif
     
-</main>
+        {{-- Hiển thị nội dung chính --}}
+        {{$slot}}
+    </main>
+    <header>
 
-<!-- Footer Section -->
-<footer class="bg-gray-800 text-white py-6">
-    <x-footer />
-    <x-footer-menu />
-</footer>
-
-{{ $footer ?? '' }}
+        <x-footer/>
+    </header>
+    {{$footer ?? ""}}
 </body>
 </html>

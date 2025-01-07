@@ -17,68 +17,78 @@
                     @csrf
                     @method('PUT')
 
-                    <div class="space-y-4">
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700">Tên menu</label>
-                            <input type="text" name="name" id="name" value="{{ old('name', $menu->name ?? '') }}"
-                                class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Nhập tên menu" required>
-                            @if ($errors->has('name'))
-                                <div class="text-red-500 text-sm">{{ $errors->first('name') }}</div>
-                            @endif
-                        </div>
+                    <!-- Tên Menu -->
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">Tên Menu</label>
+                        <input type="text" 
+                               name="name" id="name" 
+                               value="{{ old('name', $menu->name ?? '') }}" 
+                               class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                               placeholder="Nhập tên menu" 
+                               required>
+                        @if ($errors->has('name'))
+                            <div class="text-red-500 text-sm">{{ $errors->first('name') }}</div>
+                        @endif
+                    </div>
 
-                        <div>
-                            <label for="link" class="block text-sm font-medium text-gray-700">Liên kết (url)</label>
-                            <input type="text" name="link" id="link" value="{{ old('link', $menu->link ?? '') }}"
-                                class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Nhập liên kết">
-                            @if ($errors->has('link'))
-                                <div class="text-red-500 text-sm">{{ $errors->first('link') }}</div>
-                            @endif
-                        </div>
+                    <!-- Link -->
+                    <div class="mb-4">
+                        <label for="link" class="block text-sm font-medium text-gray-700">Link</label>
+                        <input type="text" 
+                               name="link" id="link" 
+                               value="{{ old('link', $menu->link ?? '') }}" 
+                               class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                               placeholder="Nhập link menu" 
+                               required>
+                        @if ($errors->has('link'))
+                            <div class="text-red-500 text-sm">{{ $errors->first('link') }}</div>
+                        @endif
+                    </div>
 
-                        <div>
-                            <label for="image" class="block text-sm font-medium text-gray-700">Hình ảnh</label>
-                            <input type="file" name="image" id="image"
-                                class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                            @if (isset($menu) && $menu->image)
-                                <img src="{{ asset('storage/images/menu/' . $menu->image) }}" alt="{{$menu->image}}"
-                                    class="mt-2 max-w-xs">
-                            @endif
-                            @if ($errors->has('image'))
-                                <div class="text-red-500 text-sm">{{ $errors->first('image') }}</div>
-                            @endif
-                        </div>
+                    {{-- <!-- Hình ảnh -->
+                    <div class="mb-4">
+                        <label for="image" class="block text-sm font-medium text-gray-700">Hình ảnh</label>
+                        <input type="file" name="image" id="image" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        @if (isset($menu) && $menu->image)
+                            <img src="{{ asset('storage/images/menu/' . $menu->image) }}" alt="{{$menu->image}}" class="mt-2" width="200">
+                        @endif
+                        @if ($errors->has('image'))
+                            <div class="text-red-500 text-sm">{{ $errors->first('image') }}</div>
+                        @endif
+                    </div> --}}
 
-                        <div>
-                            <label for="description" class="block text-sm font-medium text-gray-700">Mô tả</label>
-                            <textarea name="description" id="description" rows="4"
-                                class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Nhập mô tả">{{ old('description', $menu->description ?? '') }}</textarea>
-                            @if ($errors->has('description'))
-                                <div class="text-red-500 text-sm">{{ $errors->first('description') }}</div>
-                            @endif
-                        </div>
+                    <!-- Vị trí -->
+                    <div class="mb-4">
+                        <label for="position" class="block text-sm font-medium text-gray-700">Vị trí</label>
+                        <input type="text" name="position" id="position" 
+                               value="{{ old('position', $menu->position ?? '') }}" 
+                               class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                               placeholder="Nhập vị trí">
+                        @if ($errors->has('position'))
+                            <div class="text-red-500 text-sm">{{ $errors->first('position') }}</div>
+                        @endif
+                    </div>
 
-                        <div>
-                            <label for="sort_order" class="block text-sm font-medium text-gray-700">Thứ tự</label>
-                            <input type="number" name="sort_order" id="sort_order"
-                                value="{{ old('sort_order', $menu->sort_order ?? '') }}"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            @if ($errors->has('sort_order'))
-                                <div class="text-red-500 text-sm">{{ $errors->first('sort_order') }}</div>
-                            @endif
-                        </div>
+                    <!-- Loại -->
+                    <div class="mb-4">
+                        <label for="type" class="block text-sm font-medium text-gray-700">Loại</label>
+                        <input type="text" name="type" id="type" 
+                               value="{{ old('type', $menu->type ?? '') }}" 
+                               class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                               placeholder="Nhập loại menu">
+                        @if ($errors->has('type'))
+                            <div class="text-red-500 text-sm">{{ $errors->first('type') }}</div>
+                        @endif
+                    </div>
 
-                        <div>
-                            <label for="position" class="block text-sm font-medium text-gray-700">Vị trí</label>
-                            <select name="position" id="position"
-                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <option value="slideshow" {{ (old('position', $menu->position ?? '') == 'slideshow') ? 'selected' : '' }}>Slideshow</option>
-                                <option value="ads" {{ (old('position', $menu->position ?? '') == 'ads') ? 'selected' : '' }}>Quảng cáo</option>
-                            </select>
-                        </div>
+                    <!-- Thứ tự -->
+                    <div class="mb-4">
+                        <label for="sort_order" class="block text-sm font-medium text-gray-700">Thứ tự</label>
+                        <input type="number" name="sort_order" id="sort_order" value="{{ old('sort_order', $menu->sort_order ?? '') }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        @if ($errors->has('sort_order'))
+                            <div class="text-red-500 text-sm">{{ $errors->first('sort_order') }}</div>
+                        @endif
+                    </div>
 
                         <div>
                             <label for="status" class="block text-sm font-medium text-gray-700">Trạng thái</label>

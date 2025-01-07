@@ -47,7 +47,7 @@ class BannerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBannerRequest $request)
     {
         $banner = new Banner();
         if ($request->hasFile('image')) {
@@ -100,7 +100,7 @@ class BannerController extends Controller
      * Update the specified resource in storage.
      */
    
-     public function update(Request $request, $id)
+     public function update(UpdateBannerRequest $request, $id)
      {
          // Lấy banner theo id
          $banner = Banner::findOrFail($id);
@@ -122,13 +122,13 @@ class BannerController extends Controller
      
          // Xử lý hình ảnh nếu có upload mới
          if ($request->hasFile('image')) {
-             if ($banner->image && File::exists(public_path("storage/images/banner/" . $banner->image))) {
-                 File::delete(public_path("storage/images/banner/" . $banner->image));
+             if ($banner->image && File::exists(public_path("/images/banners/" . $banner->image))) {
+                 File::delete(public_path("/images/banners/" . $banner->image));
              }
      
              $file = $request->file('image');
              $filename = date('YmdHis') . '.' . $file->extension();
-             $file->move(public_path('storage/images/banner'), $filename);
+             $file->move(public_path('/images/banners'), $filename);
              $banner->image = $filename;
          }
      
@@ -177,8 +177,8 @@ class BannerController extends Controller
     {
         $banner = Banner::withTrashed()->where('id', $id)->first();
         if ($banner != null) {
-            if ($banner->image && File::exists(public_path("images/banner/" . $banner->image))) {
-                File::delete(public_path("images/banner/" . $banner->image));
+            if ($banner->image && File::exists(public_path("images/banners/" . $banner->image))) {
+                File::delete(public_path("images/banners/" . $banner->image));
             }
             $banner->forceDelete();
 

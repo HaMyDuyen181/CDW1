@@ -4,16 +4,22 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
     use SoftDeletes;
-    protected $table = "user";
+    protected $table = 'user';
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -46,5 +52,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    // Kiểm tra xem người dùng có phải là admin hay không
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    // Kiểm tra xem người dùng có phải là customer hay không
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer';
     }
 }

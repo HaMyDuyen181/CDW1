@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\backend\AuthController;
 use Illuminate\Support\Facades\Route;
 //Controller trang người dùng
 use App\Http\Controllers\frontend\HomeController as TrangchuController;
@@ -8,19 +9,22 @@ use App\Http\Controllers\frontend\ContactController as LienheController;
 use App\Http\Controllers\frontend\AboutusController as GioithieuController;
 use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\PostController as BaivietController;
+use App\Http\Controllers\frontend\UserController as ThanhVienController;
+
 //Controller trang quản trị
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\BannerController;
 use App\Http\Controllers\backend\BrandController;
 use App\Http\Controllers\backend\CategoryController;
-use App\Http\Controllers\backend\ProductController;
-use App\Http\Controllers\backend\UserController;
-use App\Http\Controllers\backend\TopicController;
 use App\Http\Controllers\backend\ContactController;
 use App\Http\Controllers\backend\MenuController;
-use App\Http\Controllers\backend\PostController;
 use App\Http\Controllers\backend\OrderController;
-use App\Http\Controllers\backend\OrderdetailController;
+use App\Http\Controllers\backend\ProductController;
+use App\Http\Controllers\backend\PostController;
+use App\Http\Controllers\backend\TopicController;
+use App\Http\Controllers\backend\UserController;
+use App\Http\Middleware\LoginAdmin;
+use App\Http\Middleware\LoginCustomer;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -28,8 +32,7 @@ use App\Http\Controllers\backend\OrderdetailController;
 
 //Route trang người dùng
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ThanhVienController;
+
 
 Route::get('/', [TrangchuController::class, 'index'])->name('site.home');
 Route::get('/san-pham', [SanphamController::class, 'index'])->name('site.product');
@@ -49,24 +52,27 @@ Route::get('/gio-hang', [CartController::class, 'index'])->name('site.cart');
 Route::post('/thanh-toan', [CartController::class, 'checkout'])->name('site.checkout');
 Route::get('/cam-on', [CartController::class, 'thanks'])->name('site.thanks');
 //
+
+// Route trang người dùng (Yêu cầu đăng nhập)
+Route::middleware(['login-customer'])->group(function () {
+    Route::get('/thong-tin', [ThanhVienController::class, 'profile'])->name('site.profile'); // Trang thông tin người dùng
+    Route::get('/dang-xuat', [ThanhVienController::class, 'logout'])->name('site.logout'); // Đăng xuất
+});
+
+// Route đăng nhập và đăng ký
 Route::get('/dang-nhap', [ThanhVienController::class, 'login'])->name('site.login');
 Route::post('/dang-nhap', [ThanhVienController::class, 'dologin'])->name('site.dologin');
 Route::get('/dang-ky', [ThanhVienController::class, 'register'])->name('site.register');
 Route::post('/dang-ky', [ThanhVienController::class, 'doregister'])->name('site.doregister');
-Route::get('/dang-xuat', [ThanhVienController::class, 'logout'])->name('site.logout');
-Route::get('/thong-tin', [ThanhVienController::class, 'profile'])->name('site.profile');
+
 //đăng nhập trang quan trị
-Route::get('admin/login', [AuthController::class, 'login'])->name('admin.login');
-Route::post('admin/login', [AuthController::class, 'dologin'])->name('admin.doLogin');
-Route::get('admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+Route::get('/admin/login', [AuthController::class, 'login'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'dologin'])->name('admin.dologin');
+Route::get('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
-//route admin -- Kiểm tra đăng nhập bằng middleware
-Route::middleware(['auth:admin'])->group(function () {
-    Route::get("/", [DashboardController::class, 'index'])->name('admin.dashboard');
-});
-
-Route::prefix('admin')->group(function () {
-    Route::get("/", [DashboardController::class, "index"])->name("dashboard");
+// ->middleware('login-admin')
+Route::prefix('admin')->middleware('login-admin')->group(function () {
+    Route::get("/", [DashboardController::class, "index"])->name("dashboard.index");
     Route::prefix('product')->group(function () {
         Route::get('trash', [ProductController::class, 'trash'])->name('product.trash');
         Route::delete('{product}/delete', [ProductController::class, 'delete'])->name('product.delete'); //xoa vao thung rac

@@ -78,9 +78,9 @@ return [
         ],
           // Thêm provider cho admin
     'admins' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Admin::class, // Thay đổi model nếu bạn có model Admin riêng
-    ],  
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,  // Đối tượng Admin cho quản trị viên
+        ],
 
         // 'users' => [
         //     'driver' => 'database',

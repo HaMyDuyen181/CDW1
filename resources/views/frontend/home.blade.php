@@ -1,6 +1,5 @@
 <x-layout-site>
   <x-slot:title>
-    {{ $dulieu['title'] }}
   </x-slot:title>
   <x-slot:header>
       <link rel="stylesheet" href="{{ asset('css/layoutsite.css') }}">

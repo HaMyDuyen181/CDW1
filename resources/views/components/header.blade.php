@@ -42,8 +42,8 @@ class="relative text-gray-700 hover:text-blue-500 transition duration-300">
   <!-- Dropdown Menu -->
   <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none opacity-0 visibility-hidden transition-all duration-300 group-hover:opacity-100 group-hover:visibility-visible">
     <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-      <a href="/thong-tin" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Hồ sơ</a>
-      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Đăng xuất</a>
+      <a href="{{ route('site.profile')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Hồ Sơ</a>
+      <a href="{{ route('site.logout')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng Xuất</a>
     </div>
   </div>
 </div>

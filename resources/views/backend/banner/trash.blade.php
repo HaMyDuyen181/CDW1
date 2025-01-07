@@ -29,7 +29,7 @@
                         <tr class="border-b">
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $item->id }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">
-                                <img src="{{ asset('storage/' . $item->image) }}" alt="Banner" class="rounded-md max-w-[100px] max-h-[100px]"> {{-- Added max width/height --}}
+                                <img src="{{ asset('images/banners/' . $item->image) }}" alt="Banner Image" class="rounded-md max-w-[100px] max-h-[100px]">
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $item->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">

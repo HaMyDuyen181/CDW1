@@ -27,7 +27,7 @@
                             <td class="px-6 py-4 border-b text-sm">Ảnh</td>
                             <td class="px-6 py-4 border-b text-sm">
                                 @if($banner->image)
-                                    <img src="{{ asset('storage/images/banner/' . $banner->image) }}" alt="{{ $banner->name }}" class="max-w-xs h-auto rounded-lg">
+                                    <img src="{{ asset('/images/banners/' . $banner->image) }}" alt="{{ $banner->name }}" class="max-w-xs h-auto rounded-lg">
                                 @else
                                     <span class="text-gray-500 italic">Không có ảnh</span>
                                 @endif
