@@ -49,7 +49,7 @@
     <div class="row">
         <div class="col-12">
             <h3>Hãy đăng nhập để thanh toán</h3>
-            <a href="{{route('website.getlogin')}}">Đăng nhập</a>
+            <a href="{{route('site.login')}}">Đăng nhập</a>
         </div>
     </div>
     @else

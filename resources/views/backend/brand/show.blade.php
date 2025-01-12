@@ -41,7 +41,7 @@
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Hình ảnh</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <img src="{{ asset('storage/images/' . $brand->image) }}" alt="image" class="w-32 h-32 object-cover rounded">
+                            <img src="{{ asset('images/brand/' . $brand->image) }}" alt="images" class="w-32 h-32 object-cover rounded-lg shadow-sm">
                         </td>
                     </tr>
                     <tr>

@@ -1,21 +1,26 @@
 <x-layout-site>
+    <x-slot:title>
+        Giỏ hàng
+    </x-slot:title>
+
     @vite('resources/css/app.css')
-    <div class="container mx-auto mt-8 px-4">
-                <!-- Hiển thị thông báo lỗi hoặc thành công -->
-                @if(session('error'))
-                <div class="alert alert-danger bg-red-500 text-white p-4 rounded-md mb-6">
-                    {{ session('error') }}
-                </div>
-            @endif
-    
-            @if(session('success'))
-                <div class="alert alert-success bg-green-500 text-white p-4 rounded-md mb-6">
-                    {{ session('success') }}
-                </div>
-            @endif
-    
+    <div class="container mx-auto my-10 p-4 bg-white rounded-lg shadow-md">
+        <!-- Hiển thị thông báo lỗi hoặc thành công -->
+        @if(session('error'))
+            <div class="alert alert-danger bg-red-500 text-white p-4 rounded-md mb-6">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('success'))
+            <div class="alert alert-success bg-green-500 text-white p-4 rounded-md mb-6">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <h2 class="text-center text-4xl font-semibold mb-6">Giỏ hàng</h2>
-        <form action="{{ route('site.updatecart') }}" method="post">
+
+        <form action="{{ route('site.updatecart') }}" method="POST">
             @csrf
             <table class="min-w-full border-collapse border border-gray-300">
                 <thead>
@@ -56,22 +61,23 @@
 
             <div class="flex justify-between items-center mt-6">
                 <div class="flex space-x-4">
-                    <button class="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition duration-200" type="submit" formaction="{{ route('site.updatecart') }}">Cập nhật</button>
+                    <button class="bg-green-500 text-white py-2 px-6 rounded-md hover:bg-green-600 transition duration-200" type="submit" formaction="{{ route('site.updatecart') }}">Cập nhật</button>
                     <a href="{{ route('site.delcart') }}" class="bg-red-500 text-white py-2 px-6 rounded-md hover:bg-red-600 transition duration-200">Hủy giỏ hàng</a>
-                    
-                    <!-- Gộp form thanh toán vào đây -->
-                    <form action="{{ route('site.checkout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="bg-green-500 text-white py-2 px-6 rounded-md hover:bg-green-600 transition duration-200">
-                            Thanh toán
-                        </button>
-                    </form>
                 </div>
-                
+
                 <div class="font-semibold text-2xl text-right">
                     <strong>Tổng tiền: {{ number_format($totalMoney * 1000) }}₫</strong>
                 </div>
             </div>
         </form>
+
+        <div class="mt-6 text-center">
+            <form action="{{ route('site.procced') }}" method="POST">
+                @csrf
+                <button type="submit" class="bg-green-500 text-white py-2 px-6 rounded-md hover:bg-green-600 transition duration-200">
+                    Tiến hành thanh toán
+                </button>
+            </form>
+        </div>
     </div>
 </x-layout-site>

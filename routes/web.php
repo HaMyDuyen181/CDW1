@@ -7,7 +7,7 @@ use App\Http\Controllers\frontend\HomeController as TrangchuController;
 use App\Http\Controllers\frontend\ProductController as SanphamController;
 use App\Http\Controllers\frontend\ContactController as LienheController;
 use App\Http\Controllers\frontend\AboutusController as GioithieuController;
-use App\Http\Controllers\frontend\CartController;
+use App\Http\Controllers\frontend\CartController as GiohangController;
 use App\Http\Controllers\frontend\PostController as BaivietController;
 use App\Http\Controllers\frontend\UserController as ThanhVienController;
 
@@ -35,22 +35,32 @@ use App\Http\Controllers\HomeController;
 
 
 Route::get('/', [TrangchuController::class, 'index'])->name('site.home');
+// Sản phẩm
 Route::get('/san-pham', [SanphamController::class, 'index'])->name('site.product');
 Route::get('/san-pham/{slug}', [SanphamController::class, 'detail'])->name('site.product.detail');
-Route::get('/bai-viet/{slug}', [PostController:: class, 'detail'])->name('site.post.detail');
-Route::get('/danh-muc/{slug}', [SanphamController::class, 'showCategory'])->name('site.product.category');
+Route::get('/chi-tiet-san-pham/{slug}', [SanphamController::class, 'product_detail'])->name('site.product.detail');
+// Danh mục sản phẩm
+Route::get('/danh-muc', [SanphamController::class, 'category'])->name('site.product.by.category'); // Danh sách tất cả danh mục
+Route::get('/danh-muc/{slug}', [SanphamController::class, 'showCategory'])->name('site.product.category'); // Sản phẩm theo danh mục
+// Thương hiệu sản phẩm
+Route::get('/thuong-hieu', [SanphamController::class, 'brand'])->name('site.product.by.brand'); // Danh sách tất cả thương hiệu
+Route::get('/thuong-hieu/{slug}', [SanphamController::class, 'showBrand'])->name('site.product.brand'); // Sản phẩm theo thương hiệu
+// Bài viết
+Route::get("chi-tiet-bai-viet/{slug}", [BaivietController::class, "post_detail"])->name('site.post.detail');
+// Liên hệ & Giới thiệu
 Route::get('/lien-he', [LienheController::class, 'index'])->name('site.contact');
 Route::get('/gioi-thieu', [GioithieuController::class, 'index'])->name('frontend.about_us');
-Route::get('/chi-tiet-san-pham/{slug}', [SanphamController::class, 'product_detail'])->name('site.product.detail');
-Route::get("chi-tiet-bai-viet/{slug}", [BaivietController::class, "post_detail"])->name('site.post.detail');
+// Tìm kiếm
+Route::get('search', [SanphamController::class, 'search'])->name('site.search');
 
 //cart
-Route::get('/addcart/{id}', [CartController::class, 'addcart'])->name('site.addcart');
-Route::post('/updatecart', [CartController::class, 'updatecart'])->name('site.updatecart');
-Route::get('/delcart/{id?}', [CartController::class, 'delcart'])->name('site.delcart');
-Route::get('/gio-hang', [CartController::class, 'index'])->name('site.cart');
-Route::post('/thanh-toan', [CartController::class, 'checkout'])->name('site.checkout');
-Route::get('/cam-on', [CartController::class, 'thanks'])->name('site.thanks');
+Route::get('/addcart/{id}', [GiohangController::class, 'addcart'])->name('site.addcart');
+Route::post('/updatecart', [GiohangController::class, 'updatecart'])->name('site.updatecart');
+Route::get('/delcart/{id?}', [GiohangController::class, 'delcart'])->name('site.delcart');
+Route::get('/gio-hang', [GiohangController::class, 'index'])->name('site.cart');
+Route::post('/thanh-toan', [GiohangController::class, 'checkout'])->name('site.checkout');
+Route::post('/tien-hanh-thanh-toan', [GiohangController::class, 'procced'])->name('site.procced');
+Route::get('/cam-on', [GiohangController::class, 'thanks'])->name('site.thanks');
 //
 
 // Route trang người dùng (Yêu cầu đăng nhập)

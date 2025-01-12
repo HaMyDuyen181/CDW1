@@ -56,7 +56,7 @@ class UserController extends Controller
                 Auth::login($user, $request->has('remember'));
 
                 // Chuyển hướng đến trang profile
-                return redirect()->route('site.profile')->with('success', 'Đăng nhập thành công!');
+                return redirect()->route('site.home')->with('success', 'Đăng nhập thành công!');
             } else {
                 // Mật khẩu không đúng
                 return redirect()->route('site.login')->withErrors(['password' => 'Mật khẩu không đúng.']);

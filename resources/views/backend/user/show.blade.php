@@ -74,8 +74,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Hình ảnh
                                     đại diện</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-black">
-                                    <img src="{{ asset('storage/images/' . $user->thumbnail) }}" alt="thumbnail"
-                                        class="w-32 h-32 object-cover rounded">
+                                    <img src="{{ asset('images/user/' . $user->thumbnail) }}" alt="Thumbnail" class="w-32 h-32 object-cover rounded-lg shadow-sm">
                                 </td>
                             </tr>
                         </tbody>

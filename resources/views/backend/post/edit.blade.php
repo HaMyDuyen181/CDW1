@@ -81,7 +81,7 @@
                                 class="mt-1 block w-full px-4 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             @if ($post->thumbnail)
                                 <div class="mt-2">
-                                    <img src="{{ asset('storage/images/post/' . $post->thumbnail) }}"
+                                    <img src="{{ asset('/images/posts/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}" class="max-w-xs h-auto rounded-lg"> {{-- Added max-w-xs and rounded-lg --}}
                                 </div>
                             @endif

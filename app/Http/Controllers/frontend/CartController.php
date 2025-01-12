@@ -72,20 +72,31 @@ function delcart($id = null)
 }
 
 
-function checkout(Request $request)
+public function procced()
 {
-    // Kiểm tra giỏ hàng có rỗng không
+
+    $cart = session()->get('cart', []);
+    $total = 0;
+    if (empty($cart)) {
+        return redirect()->back()->with('error', 'Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm.');
+    }
+    foreach ($cart as $item) {
+        $total += $item['qty'] * $item['price'];
+    }
+    return view("frontend.procced", compact('total'));
+}
+// Thanh toán
+public function checkout(Request $request)
+{
     $cart = session()->get('cart', []);
     if (empty($cart)) {
-        return redirect()->back()->with('error', 'Giỏ hàng của bạn hiện tại không có sản phẩm. Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán.');
+        return redirect()->back()->with('error', 'Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
     }
 
-    // Kiểm tra người dùng đã đăng nhập chưa
     if (!Auth::check()) {
-        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiếp tục thanh toán.');
+        return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để thanh toán.');
     }
 
-    // Tiến hành tạo đơn hàng
     $user = Auth::user();
     $order = new Order();
     $order->user_id = $user->id;
@@ -94,10 +105,10 @@ function checkout(Request $request)
     $order->phone = $request->phone;
     $order->address = $request->address;
     $order->created_by = $user->id;
-    $order->status = 1; // Trạng thái đơn hàng (1: Đang xử lý)
+    $order->created_at = date('Y-m-d H:i:s');
+    $order->status = 1; // Đang xử lý
     $order->save();
 
-    // Lưu thông tin chi tiết đơn hàng
     foreach ($cart as $id => $item) {
         $orderdetail = new OrderDetail();
         $orderdetail->order_id = $order->id;
@@ -108,12 +119,10 @@ function checkout(Request $request)
         $orderdetail->save();
     }
 
-    // Xóa giỏ hàng sau khi thanh toán thành công
     session()->forget('cart');
     session()->forget('cart_count');
 
-    // Chuyển hướng tới trang cảm ơn
-    return redirect()->route('site.thanks')->with('success', 'Đã đặt hàng thành công');
+    return redirect()->route('site.thanks')->with('success', 'Đặt hàng thành công!');
 }
 
 

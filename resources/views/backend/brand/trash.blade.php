@@ -24,7 +24,7 @@
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="rounded-md w-20 h-auto">
+                            <img src="{{ asset('images/brand/' . $item->image) }}" alt="{{ $item->name }}" class="rounded-md" width="50">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex justify-center space-x-2">

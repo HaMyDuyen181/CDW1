@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::select("id", "name", "password", "fullname", "gender", "thumbnail", "email", "phone", "address", "roles", "status")
-            ->orderBy('id', 'DESC')->paginate(10);
+            ->orderBy('id', 'ASC')->paginate(10);
         return view('backend.user.index', compact('users'));
     }
     public function trash()

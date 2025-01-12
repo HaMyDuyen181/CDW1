@@ -54,7 +54,7 @@
                         <tr>
                             <td class="px-6 py-3 border-b font-semibold">Ảnh danh mục</td>
                             <td class="px-6 py-3 border-b">
-                                <img src="{{ asset('images/categories/' . $category->image) }}" alt="Category Image" class="w-32 h-32 object-cover">
+                                <img src="{{ asset('images/category/' . $category->image) }}" alt="Category Image" class="w-32 h-32 object-cover">
                             </td>
                         </tr>
                     </tbody>

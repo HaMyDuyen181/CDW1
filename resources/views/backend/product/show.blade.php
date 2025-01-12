@@ -43,11 +43,11 @@
                         </tr>
                         <tr>
                             <td class="px-6 py-3 border-b font-semibold">Giá mua</td>
-                            <td class="px-6 py-3 border-b">{{ number_format($product->price_buy, 0, ',', '.') }} VND</td>
+                            <td class="px-6 py-3 border-b">{{ number_format($product->price_buy, 0, ',', '.') *1000 }} VND</td>
                         </tr>
                         <tr>
                             <td class="px-6 py-3 border-b font-semibold">Giá bán</td>
-                            <td class="px-6 py-3 border-b">{{ number_format($product->price_sale, 0, ',', '.') }} VND</td>
+                            <td class="px-6 py-3 border-b">{{ number_format($product->price_sale, 0, ',', '.') *1000 }} VND</td>
                         </tr>
                         <tr>
                             <td class="px-6 py-3 border-b font-semibold">Số lượng</td>
@@ -60,7 +60,7 @@
                         <tr>
                             <td class="px-6 py-3 border-b font-semibold">Ảnh sản phẩm</td>
                             <td class="px-6 py-3 border-b">
-                                <img src="{{ asset('images/products/' . $product->thumbnail) }}" alt="Thumbnail" class="w-32 h-32 object-cover rounded-lg shadow-sm">
+                                <img src="{{ asset('images/product/' . $product->thumbnail) }}" alt="Thumbnail" class="w-32 h-32 object-cover rounded-lg shadow-sm">
                             </td>
                         </tr>
                         <tr>

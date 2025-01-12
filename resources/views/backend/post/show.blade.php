@@ -47,7 +47,7 @@
                         <tr>
                             <td class="px-6 py-4 border-b font-medium text-gray-700 text-sm">Hình thu nhỏ</td>
                             <td class="px-6 py-4 border-b text-sm">
-                                <img src="{{ asset('storage/images/post/' . $post->thumbnail) }}" alt="thumbnail"
+                                <img src="{{ asset('/images/posts/' . $post->thumbnail) }}" alt="thumbnail"
                                     class="max-w-xs h-auto rounded-lg">
                             </td>
                         </tr>
