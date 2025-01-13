@@ -10,12 +10,15 @@ use App\Models\Topic;
 class PostController extends Controller
 {
     public function index()
-    {
-        $list_post = Post::where('status', '=', 1)
-        ->orderBy('created_at', 'desc')
-        ->paginate(2);
-        return view("frontend.post", compact('list_post'));
-    }
+{
+    $post_list = Post::where('status', 1) // Lấy bài viết có status = 1
+        ->orderBy('created_at', 'desc')  // Sắp xếp theo ngày tạo, bài viết mới nhất trước
+        ->take(2)                        // Lấy 2 bài viết đầu tiên
+        ->get();                         // Trả về dưới dạng collection
+    return view("frontend.post-new", compact('post_list'));
+}
+
+
     public function getlisttopicid($rowid)
     {
         $listtopicid = [];
@@ -52,12 +55,15 @@ class PostController extends Controller
     public function post_detail($slug)
     {
         $post = Post::where([['status', '=', 1], ['slug', '=', $slug]])->first();
-        $listtopicid = $this->getlisttopicid(($post->topic_id));
-        $list_post= Post::where([['status', '=', 1],['id','!=',$post->id]])
+        $listtopicid = $this->getlisttopicid($post->topic_id);
+    
+        // Get the list of related posts based on the topic
+        $relatedPosts = Post::where([['status', '=', 1], ['id', '!=', $post->id]])
             ->whereIn('topic_id', $listtopicid)
-            ->paginate(4);
-        return view("frontend.post_detail", compact('post','list_post'));
-
+            ->paginate(2);
+    
+        return view("frontend.post_detail", compact('post', 'relatedPosts'));
     }
+    
 
 }

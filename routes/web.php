@@ -10,6 +10,7 @@ use App\Http\Controllers\frontend\AboutusController as GioithieuController;
 use App\Http\Controllers\frontend\CartController as GiohangController;
 use App\Http\Controllers\frontend\PostController as BaivietController;
 use App\Http\Controllers\frontend\UserController as ThanhVienController;
+use App\Http\Controllers\frontend\PolicyController;
 
 //Controller trang quản trị
 use App\Http\Controllers\backend\DashboardController;
@@ -23,8 +24,10 @@ use App\Http\Controllers\backend\ProductController;
 use App\Http\Controllers\backend\PostController;
 use App\Http\Controllers\backend\TopicController;
 use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\HomeListCategoryController;
 use App\Http\Middleware\LoginAdmin;
 use App\Http\Middleware\LoginCustomer;
+use App\View\Components\HomeListCategory;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -46,13 +49,20 @@ Route::get('/danh-muc/{slug}', [SanphamController::class, 'showCategory'])->name
 Route::get('/thuong-hieu', [SanphamController::class, 'brand'])->name('site.product.by.brand'); // Danh sách tất cả thương hiệu
 Route::get('/thuong-hieu/{slug}', [SanphamController::class, 'showBrand'])->name('site.product.brand'); // Sản phẩm theo thương hiệu
 // Bài viết
+Route::get('/tat-ca-bai-viet', [BaivietController::class, 'index'])->name('frontend.post');
+Route::get('/tat-ca-bai-viet/{topicSlug}', [BaivietController::class, 'indexByTopic'])->name('frontend.post-topic');
 Route::get("chi-tiet-bai-viet/{slug}", [BaivietController::class, "post_detail"])->name('site.post.detail');
 // Liên hệ & Giới thiệu
+Route::post('/da-gui-tin-nhan', [LienheController::class, 'sendMessage'])->name('frontend.contact.send');
 Route::get('/lien-he', [LienheController::class, 'index'])->name('site.contact');
 Route::get('/gioi-thieu', [GioithieuController::class, 'index'])->name('frontend.about_us');
 // Tìm kiếm
-Route::get('search', [SanphamController::class, 'search'])->name('site.search');
-
+Route::get('search', [SanphamController::class, 'search'])->name('frontend.search');
+//Trang don
+Route::get('/cac-chinh-sach/chinh-sach-van-chuyen', [PolicyController::class, 'shippingPolicy'])->name('shipping.policy');
+Route::get('/cac-chinh-sach/chinh-sach-bao-mat', [PolicyController::class, 'privacyPolicy'])->name('privacy.policy');
+Route::get('/cac-chinh-sach/chinh-sach-doi-tra', [PolicyController::class, 'returnPolicy'])->name('return.policy');
+Route::get('/cac-chinh-sach/chinh-sach-thanh-toan', [PolicyController::class, 'paymentPolicy'])->name('payment.policy');
 //cart
 Route::get('/addcart/{id}', [GiohangController::class, 'addcart'])->name('site.addcart');
 Route::post('/updatecart', [GiohangController::class, 'updatecart'])->name('site.updatecart');

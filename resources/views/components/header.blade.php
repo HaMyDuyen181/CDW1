@@ -20,8 +20,7 @@
         <x-main-menu/>
         </div>
         <div class="flex items-center space-x-6">
-          <!-- Tìm kiếm -->
-          <x-search/>
+
 
 
         <!-- Cart Icon -->

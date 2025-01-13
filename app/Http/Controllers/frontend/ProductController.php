@@ -76,20 +76,35 @@ class ProductController extends Controller
     // Trả về view
     return view('frontend.product', compact('products', 'categories', 'brands'));
       }  
-    public function showCategory($slug)
+   public function showCategory(Request $request, $slug)
     {
-        $products = Product::whereHas('category', function ($query) use ($slug) {
-            $query->where('slug', $slug);
-        })->get();
-        
+        // Tìm danh mục theo slug
+        $category = Category::where('slug', $slug)->firstOrFail();
 
-        // Nếu không tìm thấy danh mục
-        if ($products->isEmpty()) {
-            abort(404, 'Danh mục không tồn tại.');
+        // Tìm các danh mục con nếu có
+        $subcategories = Category::where('parent_id', $category->id)->get();
+
+        // Query sản phẩm thuộc danh mục hiện tại và các danh mục con
+        $productsQuery = Product::whereHas('category', function ($query) use ($category) {
+            $query->where('id', $category->id)
+                ->orWhere('parent_id', $category->id);
+        });
+
+        // Sắp xếp sản phẩm
+        $sort = $request->get('sort', 'newest');
+        if ($sort === 'price_asc') {
+            $productsQuery->orderBy('price_buy', 'asc');
+        } elseif ($sort === 'price_desc') {
+            $productsQuery->orderBy('price_buy', 'desc');
+        } else {
+            $productsQuery->orderBy('created_at', 'desc'); // Mặc định: Mới nhất
         }
 
-        // Trả về view với danh sách sản phẩm
-        return view('product.category', compact('products', 'slug'));
+        // Phân trang sản phẩm
+        $products = $productsQuery->paginate(12)->appends($request->query());
+
+        // Trả về view với dữ liệu
+        return view('frontend.products.category', compact('products', 'category', 'subcategories', 'sort'));
     }
     public function product_detail($slug)
     {

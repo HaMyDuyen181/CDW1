@@ -1,25 +1,32 @@
 <x-layout-site>
-    @vite('resources/css/app.css')
-    <div class="container mx-auto my-8">
-        <h2 class="text-center text-2xl font-bold text-red-600">Chi tiết bài viết</h2>
-        <div class="flex flex-wrap bg-white shadow-lg rounded-lg overflow-hidden my-6">
-            <div class="w-full md:w-1/3">
-                <img src="{{ asset('images/posts/' . $post->thumbnail) }}" class="w-full h-72 object-cover" alt="{{ $post->thumbnail }}">
-            </div>
-            <div class="w-full md:w-2/3 p-6">
-                <h4 class="text-2xl font-semibold mb-4">{{ $post->title }}</h4>
-                <p class="text-gray-700 mb-4"><strong>Mô tả:</strong> {!! nl2br(e($post->description)) !!}</p>
-            </div>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">{{ $post->title }}</h1>
+        <div class="mb-6">
+            <img src="{{ asset('images/posts/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-[500px] h-auto border border-gray-300 rounded-md">
+        </div>
+        <div class="text-lg text-gray-700 mb-6">
+            {!! $post->content !!}
         </div>
 
-        <div class="my-8">
-            <h3 class="text-xl font-semibold text-red-600 mb-6">Bài viết cùng loại</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @foreach ($list_post as $postitem)
-                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                        <x-post-item :postitem="$postitem" />
+        <!-- Bài viết liên quan -->
+        <div class="mt-10">
+            <h2 class="text-2xl font-semibold mb-4">Bài viết theo chủ đề</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                @if($relatedPosts->isEmpty())
+                <p>Không có bài viết liên quan</p>
+            @else
+                @foreach ($relatedPosts as $relatedPost)
+                    <div class="border border-gray-300 rounded-lg p-4 shadow-md">
+                        <a href="{{ route('site.post.detail', ['slug' => $relatedPost->slug]) }}">
+                            <img src="{{ asset('images/posts/' . $relatedPost->thumbnail) }}" alt="{{ $relatedPost->title }}" class="w-full h-40 object-cover rounded-lg mb-3">
+                            <h3 class="text-lg font-bold">{{ $relatedPost->title }}</h3>
+                        </a>
+                        <p class="text-gray-600 mt-2 text-sm">
+                            {{ Str::limit($relatedPost->description, 100) }}
+                        </p>
                     </div>
                 @endforeach
+            @endif
             </div>
         </div>
     </div>
