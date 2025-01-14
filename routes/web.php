@@ -49,7 +49,8 @@ Route::get('/danh-muc/{slug}', [SanphamController::class, 'showCategory'])->name
 Route::get('/thuong-hieu', [SanphamController::class, 'brand'])->name('site.product.by.brand'); // Danh sách tất cả thương hiệu
 Route::get('/thuong-hieu/{slug}', [SanphamController::class, 'showBrand'])->name('site.product.brand'); // Sản phẩm theo thương hiệu
 // Bài viết
-Route::get('/tat-ca-bai-viet', [BaivietController::class, 'index'])->name('frontend.post');
+Route::get('/tat-ca-bai-viet', [BaivietController::class, 'index'])->name('posts.index');
+// Route::get('/tat-ca-bai-viet', [BaivietController::class, 'index'])->name('frontend.post');
 Route::get('/tat-ca-bai-viet/{topicSlug}', [BaivietController::class, 'indexByTopic'])->name('frontend.post-topic');
 Route::get("chi-tiet-bai-viet/{slug}", [BaivietController::class, "post_detail"])->name('site.post.detail');
 // Liên hệ & Giới thiệu
@@ -72,7 +73,7 @@ Route::post('/thanh-toan', [GiohangController::class, 'checkout'])->name('site.c
 Route::post('/tien-hanh-thanh-toan', [GiohangController::class, 'procced'])->name('site.procced');
 Route::get('/cam-on', [GiohangController::class, 'thanks'])->name('site.thanks');
 //
-
+//
 // Route trang người dùng (Yêu cầu đăng nhập)
 Route::middleware(['login-customer'])->group(function () {
     Route::get('/thong-tin', [ThanhVienController::class, 'profile'])->name('site.profile'); // Trang thông tin người dùng

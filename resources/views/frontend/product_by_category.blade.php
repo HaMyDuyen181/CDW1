@@ -5,37 +5,48 @@
     </x-slot:title>
 
     <div class="container mx-auto p-6">
-        <h2 class="text-4xl font-bold mb-8 text-center text-gray-800">Sản phẩm theo danh mục</h2>
+        <h2 class="text-4xl font-bold mb-8 text-green-500 text-center">Sản phẩm theo danh mục</h2>
 
         <!-- Bộ lọc và chế độ hiển thị trong 1 hàng ngang -->
-        <form method="GET" action="{{ url()->current() }}" class="flex flex-wrap items-center gap-4 mb-8 bg-gray-100 p-4 rounded-lg shadow">
+        <form method="GET" action="{{ route('site.product.by.category') }}" class="flex items-center gap-4 mb-6">
             <!-- Bộ lọc theo danh mục -->
             <div class="flex items-center gap-2">
                 <label for="category" class="text-gray-600 font-medium">Danh mục:</label>
                 <select name="category" id="category" onchange="this.form.submit()" class="border rounded-md p-2 shadow-sm">
                     <option value="">Tất cả</option>
                     @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                        <option value="{{ $category->id }}" {{ $selectedCategoryId == $category->id ? 'selected' : '' }}>
                             {{ $category->name }}
                         </option>
                     @endforeach
                 </select>
             </div>
-
-            <!-- Bộ lọc sắp xếp -->
-            <div class="flex items-center gap-2">
-                <label for="sort_by" class="text-gray-600 font-medium">Sắp xếp:</label>
-                <select name="sort_by" id="sort_by" onchange="this.form.submit()" class="border rounded-md p-2 shadow-sm">
-                    <option value="">Mặc định</option>
-                    <option value="price-asc" {{ request('sort_by') == 'price-asc' ? 'selected' : '' }}>Giá tăng dần</option>
-                    <option value="price-desc" {{ request('sort_by') == 'price-desc' ? 'selected' : '' }}>Giá giảm dần</option>
-                    <option value="newest" {{ request('sort_by') == 'newest' ? 'selected' : '' }}>Mới nhất</option>
-                </select>
-            </div>
+            <!-- Dropdown chọn sắp xếp -->
+    <div class="flex items-center gap-2">
+        <label for="sort_by" class="text-gray-600 font-medium">Sắp xếp:</label>
+        <select name="sort_by" id="sort_by" onchange="this.form.submit()" class="border rounded-md p-2 shadow-sm">
+            <option value="" {{ request('sort_by') == '' ? 'selected' : '' }}>Mặc định</option>
+            <option value="price_asc" {{ request('sort_by') == 'price_asc' ? 'selected' : '' }}>Giá tăng dần</option>
+            <option value="price_desc" {{ request('sort_by') == 'price_desc' ? 'selected' : '' }}>Giá giảm dần</option>
+            <option value="newest" {{ request('sort_by') == 'newest' ? 'selected' : '' }}>Mới nhất</option>
+        </select>
+    </div>
+            {{-- <!-- Bộ lọc theo khoảng giá -->
+    <div class="flex items-center gap-2">
+        <label for="price_range" class="text-gray-600 font-medium">Khoảng giá:</label>
+        <select name="price_range" id="price_range" onchange="this.form.submit()" class="border rounded-md p-2 shadow-sm">
+            <option value="">Tất cả</option>
+            <option value="0-1000000" {{ request('price_range') == '0-1000000' ? 'selected' : '' }}>Dưới 1,000,000đ</option>
+            <option value="1000000-5000000" {{ request('price_range') == '1000000-5000000' ? 'selected' : '' }}>1,000,000đ - 5,000,000đ</option>
+            <option value="5000000-10000000" {{ request('price_range') == '5000000-10000000' ? 'selected' : '' }}>5,000,000đ - 10,000,000đ</option>
+            <option value="10000000-" {{ request('price_range') == '10000000-' ? 'selected' : '' }}>Trên 10,000,000đ</option>
+        </select>
+    </div> --}}
+    
 
             <!-- Bộ lọc hiển thị -->
             <div class="flex items-center gap-2">
-                <span class="text-gray-600 font-medium">Hiển thị:</span>
+                <span class="text-gray-600 font-medium">Chế độ hiển thị:</span>
                 <button type="submit" name="view_mode" value="grid"
                     class="p-2 rounded {{ request('view_mode', 'grid') == 'grid' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600' }}">
                     Lưới

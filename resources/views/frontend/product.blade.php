@@ -5,6 +5,7 @@
 
     <div>
         <div class="py-10">
+            
         </div>
 
         <!-- Product Section -->
@@ -23,6 +24,19 @@
                             @endforeach
                         </select>
                     </label>
+                  <!-- Lọc theo thương hiệu -->
+                 
+                  <label class="flex items-center space-x-2">
+                    <span class="font-semibold">Thương hiệu:</span>
+                    <select name="brand" class="border border-gray-300 rounded p-2" onchange="this.form.submit()">
+                        <option value="all">Tất cả</option>
+                        @foreach ($brands as $brand)
+                            <option value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'selected' : '' }}>
+                                {{ $brand->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </label>
                 
               <!-- Sắp xếp -->
                 <label class="flex items-center space-x-2">
@@ -35,7 +49,7 @@
                 </label>
 
                 <!-- Lọc theo giá -->
-                <label class="flex items-center space-x-2">
+                {{-- <label class="flex items-center space-x-2">
                     <span class="font-semibold">Giá:</span>
                     <select name="price_buy" class="border border-gray-300 rounded p-2" onchange="this.form.submit()">
                         <option value="all" {{ request('price_buy') == 'all' ? 'selected' : '' }}>Tất cả</option>
@@ -44,14 +58,18 @@
                         <option value="500000-1000000" {{ request('price_buy') == '500000-1000000' ? 'selected' : '' }}>500,000 VND - 1,000,000 VND</option>
                         <option value="1000000" {{ request('price_buy') == '1000000' ? 'selected' : '' }}>Trên 1,000,000 VND</option>
                     </select>
-                </label>
-                <label class="flex items-center space-x-2">
-                    <span class="font-semibold">Hiển thị:</span>
-                    <select name="view_mode" class="border border-gray-300 rounded p-2" onchange="this.form.submit()">
-                        <option value="grid" {{ request('view_mode') == 'grid' ? 'selected' : '' }}>Lưới</option>
-                        <option value="list" {{ request('view_mode') == 'list' ? 'selected' : '' }}>Danh sách</option>
-                    </select>
-                </label>
+                </label> --}}
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-600 font-medium">Chế độ hiển thị:</span>
+                    <button type="submit" name="view_mode" value="grid"
+                        class="p-2 rounded {{ request('view_mode', 'grid') == 'grid' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+                        Lưới
+                    </button>
+                    <button type="submit" name="view_mode" value="list"
+                        class="p-2 rounded {{ request('view_mode', 'grid') == 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600' }}">
+                        Danh sách
+                    </button>
+                </div>
                 </form>
                 
             </div>

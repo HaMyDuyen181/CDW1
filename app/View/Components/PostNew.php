@@ -25,7 +25,7 @@ class PostNew extends Component
     {
         $post_list = Post::where([['status', 1],['type','=','post']])
             ->orderBy('created_at', 'desc')
-            ->limit(4)
+            ->limit(2)
             ->get();
         return view('components.post-new',compact('post_list'));
     }

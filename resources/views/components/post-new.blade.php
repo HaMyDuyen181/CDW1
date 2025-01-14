@@ -11,6 +11,12 @@
                     </div>
                 </div>
             </div>
+            <!-- Nút Xem Tất Cả Bài Viết -->
+            <div class="text-center mt-6">
+                <a href="{{ route('posts.index') }}" class="inline-block px-4 py-2 bg-blue-600 text-white font-bold text-lg rounded-lg hover:bg-blue-500 transition">
+                    Xem tất cả bài viết
+                </a>
+            </div>
         </div>
     </section>
 </div>

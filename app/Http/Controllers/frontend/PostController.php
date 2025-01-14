@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     $post_list = Post::where('status', 1) // Lấy bài viết có status = 1
         ->orderBy('created_at', 'desc')  // Sắp xếp theo ngày tạo, bài viết mới nhất trước
-        ->take(2)                        // Lấy 2 bài viết đầu tiên
+        ->take(4)                        // Lấy 2 bài viết đầu tiên
         ->get();                         // Trả về dưới dạng collection
     return view("frontend.post-new", compact('post_list'));
 }
