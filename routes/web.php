@@ -77,6 +77,8 @@ Route::get('/cam-on', [GiohangController::class, 'thanks'])->name('site.thanks')
 // Route trang người dùng (Yêu cầu đăng nhập)
 Route::middleware(['login-customer'])->group(function () {
     Route::get('/thong-tin', [ThanhVienController::class, 'profile'])->name('site.profile'); // Trang thông tin người dùng
+    Route::get('/thong-tin/edit', [ThanhVienController::class, 'edit'])->name('site.profile.edit');
+    Route::post('/thong-tin/update', [ThanhVienController::class, 'update'])->name('site.profile.update');
     Route::get('/dang-xuat', [ThanhVienController::class, 'logout'])->name('site.logout'); // Đăng xuất
 });
 

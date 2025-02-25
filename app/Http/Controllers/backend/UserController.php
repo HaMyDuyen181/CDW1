@@ -80,12 +80,14 @@ class UserController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             $file = $request->file('thumbnail');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension; // Đổi sang timestamp để tránh trùng tên
+            $path = 'images/user/' . $filename;
             $file->move(public_path('images/user'), $filename);
-            $user->thumbnail = $filename;
-        } else {
-            $user->thumbnail = 'default-thumbnail.jpg';
+            $user->thumbnail = $path; // Lưu đường dẫn đầy đủ
         }
+        
+        
 
         $user->created_by = Auth::id() ?? 1; // Gán ID người tạo
         $user->save();
@@ -139,13 +141,13 @@ class UserController extends Controller
         }
 
         if ($request->hasFile('thumbnail')) {
-            if ($user->thumbnail && File::exists(public_path("storage/images/user/" . $user->thumbnail))) {
-                File::delete(public_path("storage/images/user/" . $user->thumbnail));
+            if ($user->thumbnail && File::exists(public_path("images/user/" . $user->thumbnail))) {
+                File::delete(public_path("images/user/" . $user->thumbnail));
             }
             $file = $request->file('thumbnail');
             $extension = $file->extension();
             $filename = date('YmdHis') . "." . $extension;
-            $file->move(public_path('storage/images/user'), $filename);
+            $file->move(public_path('images/user'), $filename);
             $user->thumbnail = $filename;
         }
         $user->fullname = $request->fullname;

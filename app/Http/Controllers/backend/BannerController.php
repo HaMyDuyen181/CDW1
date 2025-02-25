@@ -54,7 +54,7 @@ class BannerController extends Controller
             $file = $request->file('image');
             $extension = $file->extension();
             $filename = date('YmdHis') . "." . $extension;
-            $file->move(public_path('images/banner'), $filename);
+            $file->move(public_path('images/banners'), $filename);
             $banner->image = $filename;
 
             $banner->name = $request->name;

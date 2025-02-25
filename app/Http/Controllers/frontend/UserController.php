@@ -121,4 +121,23 @@ class UserController extends Controller
         $user = Auth::user(); // Lấy thông tin người dùng đã đăng nhập
         return view('frontend.profile', compact('user')); // Truyền dữ liệu vào view
     }
+    public function edit()
+    {
+        $user = auth()->user();
+        return view('frontend.edit-profile', compact('user'));
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:15',
+            'address' => 'nullable|string|max:255',
+        ]);
+
+        $user = auth()->user();
+        $user->update($request->only(['name', 'phone', 'address']));
+
+        return redirect()->route('site.profile.edit')->with('success', 'Cập nhật thông tin thành công!');
+    }
 }

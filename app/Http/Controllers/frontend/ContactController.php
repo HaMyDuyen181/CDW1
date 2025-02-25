@@ -42,5 +42,5 @@ return view("frontend.contact", ["contactData" => $contactData]);
         // Chuyển hướng lại trang liên hệ và hiển thị thông báo thành công
         return redirect()->route('frontend.contact')->with('success', 'Tin nhắn của bạn đã được gửi thành công! Chúng tôi sẽ phản hồi sớm nhất.');
     }
-    
+
 }

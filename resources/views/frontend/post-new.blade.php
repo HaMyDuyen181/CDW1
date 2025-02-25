@@ -15,17 +15,18 @@
                 <!-- Danh sách bài viết -->
                 <div class="product-list mb-3">
                     <div class="product_list-s py-3">
-                        <!-- Lưới hiển thị các bài viết, mỗi hàng có 2 bài viết -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                        <!-- Lưới hiển thị các bài viết, mỗi bài viết chiếm 1 hàng -->
+                        <div class="grid grid-cols-1 gap-8">
                             @foreach ($post_list as $postitem)
-                                <div class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 hover:shadow-xl transition duration-300">
+                                <div class="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 hover:shadow-xl transition duration-300">
                                     <!-- Hình ảnh bài viết -->
-                                    <div class="md:col-span-2">
+                                    <div class="md:w-1/2">
                                         <img src="{{ asset('images/posts/' . $postitem->thumbnail) }}" alt="{{ $postitem->title }}" class="w-full h-auto border border-gray-300 rounded-md">
                                     </div>
+                                    
                                     <!-- Nội dung bài viết -->
-                                    <div class="p-6">
-                                        <h2 class="text-xl font-semibold text-gray-800 mb-4">{{ $postitem->title }}</h2>
+                                    <div class="p-6 md:w-1/2">
+                                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">{{ $postitem->title }}</h2>
                                         <p class="text-gray-600 text-sm">{{ Str::limit($postitem->content, 120) }}</p>
                                         <!-- Nút xem chi tiết -->
                                         <a href="{{ route('site.post.detail', $postitem->slug) }}" class="mt-4 text-blue-500 hover:text-blue-700 font-semibold">

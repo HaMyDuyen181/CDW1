@@ -13,6 +13,8 @@
             <div class="flex items-center justify-between mb-8">
                 <!-- Bộ lọc sản phẩm -->
                 <form method="GET" action="{{ route('site.product') }}" class="flex space-x-4">
+                  <!-- Lọc theo danh mục -->
+
                     <label class="flex items-center space-x-2">
                         <span class="font-semibold">Danh mục:</span>
                         <select name="category_id" class="border border-gray-300 rounded p-2" onchange="this.form.submit()">

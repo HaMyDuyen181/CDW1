@@ -7,7 +7,6 @@
             <!-- Card Profile -->
             <div class="bg-white shadow-lg rounded-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Thông Tin Tài Khoản</h2>
-                <!-- Information List -->
                 <div class="space-y-6">
                     <!-- Họ và Tên -->
                     <div class="flex flex-col">
@@ -37,6 +36,13 @@
                             {{ $user->address ?? 'Chưa cập nhật' }}
                         </p>
                     </div>
+                </div>
+
+                <!-- Nút Chỉnh sửa -->
+                <div class="mt-6 text-center">
+                    <a href="{{ route('site.profile.edit') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
+                        Chỉnh Sửa Thông Tin
+                    </a>
                 </div>
             </div>
         </div>
